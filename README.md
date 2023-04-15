@@ -1,4 +1,4 @@
-# reservapp
+# ReservAPP
 
 Aplicativo para fazer reservas em restaurantes
 
