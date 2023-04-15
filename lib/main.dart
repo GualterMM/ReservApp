@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:reservapp/screens/HomePage.dart';
-import 'package:reservapp/screens/Login.dart';
-import 'package:reservapp/screens/Registration.dart';
+import 'package:flutter/services.dart';
+import 'package:reservapp/screens/login.dart';
+import 'package:reservapp/screens/registration.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ReservApp',
+      title: 'ReservAPP',
       theme: ThemeData(
         colorScheme: const ColorScheme(
             brightness: Brightness.light,
@@ -37,12 +39,14 @@ class MyApp extends StatelessWidget {
 
         fontFamily: 'Quicksand'
       ),
-      home: TelaBemVindo(),
+      home: const TelaBemVindo(),
     );
   }
 }
 
 class TelaBemVindo extends StatelessWidget{
+  const TelaBemVindo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -158,11 +162,3 @@ class _LoginButton extends State<LoginButton>{
   }
 }
 
-class SecondRoute extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
-  }
-
-}

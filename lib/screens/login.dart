@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:reservapp/screens/HomePage.dart';
+import 'package:flutter/services.dart';
+import 'package:reservapp/screens/home_page.dart';
 
 class Login extends StatelessWidget {
+  const Login({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: TelaLogin());
+    return const Scaffold(body: SafeArea(child: TelaLogin()));
   }
 }
 
 class TelaLogin extends StatelessWidget {
+  const TelaLogin({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -77,9 +82,7 @@ class _BackButton extends State<BackButton> {
           iconSize: 30,
           icon: const Icon(Icons.arrow_back),
           color: Theme.of(context).colorScheme.tertiary,
-          onPressed: () => {
-            Navigator.pop(context)
-          },
+          onPressed: () => {Navigator.pop(context)},
         ),
       ),
     );
@@ -107,7 +110,7 @@ class _EnterButton extends State<EnterButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           )
         },
         child: const Text(
@@ -118,13 +121,5 @@ class _EnterButton extends State<EnterButton> {
         ),
       ),
     );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
   }
 }

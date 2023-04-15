@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:reservapp/screens/HomePage.dart';
+import 'package:reservapp/screens/home_page.dart';
 
 class RegistrationSucess extends StatelessWidget {
   // This widget is the root of your application.
@@ -81,7 +81,7 @@ class _ContinueButton extends State<ContinueButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           )
         },
         child: const Text(

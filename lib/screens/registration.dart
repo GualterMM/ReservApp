@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:reservapp/screens/HomePage.dart';
-import 'package:reservapp/screens/RegistrationSuccess.dart';
+import 'package:reservapp/screens/registration_success.dart';
 
 class Registration extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TelaRegistro(),
-    );
+    return Scaffold(body: SafeArea(child: TelaRegistro()));
   }
 }
 
@@ -90,9 +87,7 @@ class _BackButton extends State<BackButton> {
           iconSize: 30,
           icon: const Icon(Icons.arrow_back),
           color: Theme.of(context).colorScheme.tertiary,
-          onPressed: () => {
-            Navigator.pop(context)
-          },
+          onPressed: () => {Navigator.pop(context)},
         ),
       ),
     );
