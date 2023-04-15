@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/screens/HomePage.dart';
+import 'package:reservapp/screens/Login.dart';
+import 'package:reservapp/screens/Registration.dart';
 
 void main() {
   runApp(MyApp());
@@ -47,7 +50,7 @@ class TelaBemVindo extends StatelessWidget{
         padding: const EdgeInsets.only(left: 5.0, right: 5.0),
         children: [
           Image.asset(
-            'lib/assets/food.png',
+            'lib/assets/images/food.png',
             width: 360,
             height: 240,
             fit: BoxFit.cover,
@@ -109,7 +112,7 @@ class _RegisterButton extends State<RegisterButton>{
         onPressed: () => {
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => SecondRoute()),
+              MaterialPageRoute(builder: (context) => Registration()),
           )
         },
         child: const Text(
@@ -141,7 +144,7 @@ class _LoginButton extends State<LoginButton>{
         onTap: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => SecondRoute()),
+            MaterialPageRoute(builder: (context) => Login()),
           )
         },
         child: const Text(
