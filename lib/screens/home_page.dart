@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/screens/favorite_restaurants.dart';
 
 import '../assets/widgets/restaurant_card.dart';
 
@@ -25,10 +26,19 @@ class HomePage extends StatelessWidget {
 
       drawer: Drawer(
         child: ListView(
-          padding: EdgeInsets.all(0),
           children: [
-            DrawerHeader(
-              child: Text('Usuário'),
+            SizedBox(
+              height: 90,
+              child: DrawerHeader(
+                child: ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text("Usuário"),
+                  trailing: Icon(Icons.edit),
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
             ),
             ListTile(
               title: Text('Minhas Reservas'),
@@ -36,7 +46,12 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               title: Text('Favoritos'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const FavoriteRestaurants()),
+                );
+              },
             ),
             ListTile(
               title: Text('Sair'),

@@ -4,8 +4,6 @@ import 'package:reservapp/screens/login.dart';
 import 'package:reservapp/screens/registration.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setEnabledSystemUIMode (SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
   runApp(MyApp());
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/screens/registration_success.dart';
 
 class Registration extends StatelessWidget {
@@ -75,21 +76,9 @@ class BackButton extends StatefulWidget {
 class _BackButton extends State<BackButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Align(
       alignment: Alignment.topLeft,
-      padding: const EdgeInsets.all(20.0),
-      child: Ink(
-        decoration: ShapeDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          shape: CircleBorder(),
-        ),
-        child: IconButton(
-          iconSize: 30,
-          icon: const Icon(Icons.arrow_back),
-          color: Theme.of(context).colorScheme.tertiary,
-          onPressed: () => {Navigator.pop(context)},
-        ),
-      ),
+        child: backButton(context)
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/screens/home_page.dart';
 
 class Login extends StatelessWidget {
@@ -70,21 +71,9 @@ class BackButton extends StatefulWidget {
 class _BackButton extends State<BackButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      alignment: Alignment.topLeft,
-      padding: const EdgeInsets.all(20.0),
-      child: Ink(
-        decoration: ShapeDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          shape: const CircleBorder(),
-        ),
-        child: IconButton(
-          iconSize: 30,
-          icon: const Icon(Icons.arrow_back),
-          color: Theme.of(context).colorScheme.tertiary,
-          onPressed: () => {Navigator.pop(context)},
-        ),
-      ),
+    return Align(
+        alignment: Alignment.topLeft,
+        child: backButton(context)
     );
   }
 }
