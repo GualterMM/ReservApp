@@ -22,7 +22,7 @@ Widget restaurantCard (name, picture, score){
               child: Align(
                 alignment: Alignment.topCenter,
                 heightFactor: 2.5,
-                child: iconTextRoundedContainer(Icons.star, score),
+                child: smallInfoContainer(Icons.star, score),
               )
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/screens/check_reservations.dart';
 import 'package:reservapp/screens/favorite_restaurants.dart';
 
 import '../assets/widgets/restaurant_card.dart';
@@ -41,11 +42,16 @@ class HomePage extends StatelessWidget {
               ),
             ),
             ListTile(
-              title: Text('Minhas Reservas'),
-              onTap: () {},
+              title: const Text('Minhas Reservas'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CheckReservations()),
+                );
+              },
             ),
             ListTile(
-              title: Text('Favoritos'),
+              title: const Text('Favoritos'),
               onTap: () {
                 Navigator.push(
                   context,
@@ -54,7 +60,7 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
-              title: Text('Sair'),
+              title: const Text('Sair'),
               onTap: () {},
             ),
           ],
