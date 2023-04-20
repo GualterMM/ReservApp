@@ -1,16 +1,44 @@
 # ReservAPP
 
-Aplicativo para fazer reservas em restaurantes
+Aplicativo mobile para Android e iOS para fazer reservas em restaurantes.
 
-## Getting Started
+## Sobre
 
-This project is a starting point for a Flutter application.
+O intuito do projeto é permitir ao usuário realizar reservas nos restaurantes cadastrados no aplicativo. Ele poderá navegar entre os diferentes restaurantes da sua cidade, consultar os cardápios e preços, fazer uma reserva na data e horário de sua escolha junto ao número de convidados, deixar uma avaliação para o restaurante e consultar seus restaurantes favoritos.
 
-A few resources to get you started if this is your first Flutter project:
+### Tecnologias Utilizadas
+* **Flutter**: O front-end da aplicação é feito inteiramente em Flutter. Sua base de código permite que o aplicativo seja exportado para Android e iOS com performance virtualmente igual a um aplicativo nativo.
+* **Django REST Framework**: A API da aplicação é feita utilizando o Django REST Framework. Essa ferramenta permite a construção ágil de uma API web com código limpo e de fácil manutenção.
+* **AWS**: A parte de persistência de dados da aplicação será feita utilizando os serviços de banco de dados relacionais da Amazon. O banco de dados na nuvem permite o uso global do aplicativo, e a fácil configuração do mesmo proporciona agilidade no desenvolvimento.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Equipe de Desenvolvimento
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/GualterMM">
+        <img src="https://avatars.githubusercontent.com/u/35864822?v=4" width="100px;" alt="Foto do Gualter Machado no GitHub"/><br>
+        <sub>
+          <b>Gualter Machado</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/IsabelaRezendeB">
+        <img src="https://avatars.githubusercontent.com/u/49520751?v=4" width="100px;" alt="Foto da Isabela Rezende no GitHub"/><br>
+        <sub>
+          <b>Isabela Rezende</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/VictoriaRBrito">
+        <img src="https://avatars.githubusercontent.com/u/82007104?v=4" width="100px;" alt="Foto da Victoria Brito no GitHub"/><br>
+        <sub>
+          <b>Victoria Brito</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
