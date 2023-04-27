@@ -23,28 +23,7 @@ class TelaLogin extends StatelessWidget {
       children: [
         const BackButton(),
         loginInfoText,
-        Padding(
-          padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
-          child: TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'E-mail',
-            ),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
-          child: TextFormField(
-            obscureText: true,
-            obscuringCharacter: "*",
-            decoration: const InputDecoration(
-              border: UnderlineInputBorder(),
-              labelText: 'Senha',
-            ),
-          ),
-        ),
-        const EnterButton(),
+        const LoginForm(),
       ],
     );
   }
@@ -71,10 +50,7 @@ class BackButton extends StatefulWidget {
 class _BackButton extends State<BackButton> {
   @override
   Widget build(BuildContext context) {
-    return Align(
-        alignment: Alignment.topLeft,
-        child: backButton(context)
-    );
+    return Align(alignment: Alignment.topLeft, child: backButton(context));
   }
 }
 
@@ -110,5 +86,91 @@ class _EnterButton extends State<EnterButton> {
         ),
       ),
     );
+  }
+}
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _LoginForm();
+  }
+}
+
+class _LoginForm extends State<LoginForm> {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+              child: TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'E-mail',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "O campo \"E-mail\" não pode ser vazio.";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+              child: TextFormField(
+                obscureText: true,
+                obscuringCharacter: "*",
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'Senha',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "O campo \"Senha\" não pode ser vazio.";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.fromLTRB(20, 80, 20, 20),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(300, 50),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                onPressed: () => {
+                  if(_formKey.currentState!.validate()){
+                    // TODO: Adicionar a lógica do back-end para adicionar o usuário e deixar ele logado.
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const HomePage()),
+                    )
+                  } else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Falha ao logar, tente novamente.'))
+                    )
+                  }
+                },
+                child: const Text(
+                  'Entrar',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  textScaleFactor: 1.3,
+                ),
+              ),
+            )
+          ],
+        ));
   }
 }
