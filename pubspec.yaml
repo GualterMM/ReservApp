@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_rating_bar: ^4.0.1
   sliver_tools: ^0.2.10
+  date_time_picker: ^2.1.0
 
 dev_dependencies:
   flutter_test:

@@ -205,7 +205,7 @@ class _TelaCardapio extends State<TelaCardapio> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const Reservation()),
+                            MaterialPageRoute(builder: (context) => Reservation()),
                           );
                         },
                         child: const Text(
