@@ -55,7 +55,7 @@ class TelaFavoritos extends StatelessWidget{
         Container(
           padding: const EdgeInsets.all(20.0),
           height: 500,
-          child: listRestaurants(restaurantList)
+          child: listRestaurants(restaurantList, context)
         ),
       ],
     );

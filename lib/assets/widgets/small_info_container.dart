@@ -17,7 +17,7 @@ Widget smallInfoContainer(icon, text){
                 size: 14
             ),
             Text(
-              text,
+              text.toString(),
               textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(

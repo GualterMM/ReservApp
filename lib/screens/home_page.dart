@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/main.dart';
 import 'package:reservapp/models/menu_item.dart';
 import 'package:reservapp/screens/check_reservations.dart';
 import 'package:reservapp/screens/favorite_restaurants.dart';
@@ -69,7 +70,7 @@ class HomePage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const RestaurantMenu()),
+                  MaterialPageRoute(builder: (context) => const MyApp()),
                 );
               },
             ),
@@ -182,8 +183,8 @@ class _RestaurantList extends State<RestaurantList> {
   // Teste dos modelos
   // TODO: Remover esse teste
   late List<Restaurant> restaurantList = [
-    Restaurant(1, "Costela no Bafo", "PA", "12h00 - 17h00", 4, "R", "Comidinha hmm", "https://media-cdn.tripadvisor.com/media/photo-s/05/c2/83/34/costela-no-bafo.jpg", ""),
-    Restaurant(2, "Iwata Sushi", "PA", "19h00 - 23h00", 5, "K", "Japa hmm", "https://pr0.nicelocal.br.com/l-H8-PM_PWuAyv9z7-Ur-A/2000x1500,q75/4px-BW84_n3lJhgQGe6caI1vAfZfD8yOKqS4dO4Py5dVeCDAtW6xSQ3E2jFMD_F9x4cSVzPPFOz9KtIckfFPhOetq2LpWfalnI9_Dv1FNEerk4AgI1-JQHqN8sqFSM5oaRmT7TL6RHM", ""),
+    Restaurant(1, "Costela no Bafo", "PA", "12h00 - 17h00", 4, "R", "Pratos de carne grelhados de estilo familiar, combinados com cerveja e cocktails em um ambiente rústico e animado.", "https://media-cdn.tripadvisor.com/media/photo-s/05/c2/83/34/costela-no-bafo.jpg", ""),
+    Restaurant(2, "Iwata Sushi", "PA", "19h00 - 23h00", 5, "K", "Rodízio de sushi em Pouso Alegre", "https://pr0.nicelocal.br.com/l-H8-PM_PWuAyv9z7-Ur-A/2000x1500,q75/4px-BW84_n3lJhgQGe6caI1vAfZfD8yOKqS4dO4Py5dVeCDAtW6xSQ3E2jFMD_F9x4cSVzPPFOz9KtIckfFPhOetq2LpWfalnI9_Dv1FNEerk4AgI1-JQHqN8sqFSM5oaRmT7TL6RHM", ""),
     Restaurant(3, "Vereda", "PA", "19h00 - 23h00", 3, "P", "Pizza hmm", "https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800", ""),
   ];
   // Fim do teste dos modelos
@@ -193,7 +194,7 @@ class _RestaurantList extends State<RestaurantList> {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       height: 500,
-      child: listRestaurants(restaurantList),
+      child: listRestaurants(restaurantList, context),
     );
   }
 }

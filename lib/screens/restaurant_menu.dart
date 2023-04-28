@@ -2,25 +2,30 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/list_menu.dart';
 import 'package:reservapp/assets/widgets/small_info_container.dart';
+import 'package:reservapp/models/restaurant.dart';
+import 'package:reservapp/screens/reservation.dart';
 
 import '../assets/widgets/back_button.dart';
 import '../models/menu_item.dart';
 
 class RestaurantMenu extends StatelessWidget {
-  const RestaurantMenu({super.key});
+  Restaurant restaurant;
+
+  RestaurantMenu({super.key, required this.restaurant});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: TelaCardapio(),
+        body: TelaCardapio(restaurant: restaurant),
       ),
     );
   }
 }
 
 class TelaCardapio extends StatefulWidget {
-  const TelaCardapio({super.key});
+  Restaurant restaurant;
+  TelaCardapio({super.key, required this.restaurant});
 
   @override
   State<TelaCardapio> createState() {
@@ -29,6 +34,7 @@ class TelaCardapio extends StatefulWidget {
 }
 
 class _TelaCardapio extends State<TelaCardapio> {
+
   List<MenuItem> menu = [
     MenuItem(1, "Comida 1", 10.00, "Comida", "Comida hmm"),
     MenuItem(2, "Comida 2", 20.00, "Comida", "Comida hmm"),
@@ -49,6 +55,52 @@ class _TelaCardapio extends State<TelaCardapio> {
 
   @override
   Widget build(BuildContext context) {
+    int id = widget.restaurant.idRestaurant;
+    List<MenuItem> menu = [];
+    List<String> types = [];
+
+    switch(id){
+      case 1: // Costela
+        menu = [
+          MenuItem(1, "Picanha", 10.00, "Pratos Principais", "Picanha no espeto"),
+          MenuItem(2, "Costela", 20.00, "Pratos Principais", "Costela no bafo"),
+          MenuItem(3, "Feijoada", 30.00, "Pratos Principais", "Feijoada com linguiça e carne seca"),
+          MenuItem(4, "Cola-cola", 20.00, "Bebidas", "Cola-cola de 2 litros"),
+          MenuItem(5, "Água", 20.00, "Bebidas", "Água natural mineral de meio litro"),
+          MenuItem(6, "Skol", 10.00, "Bebidas", "Skol gelada de 1 litro"),
+          MenuItem(7, "Arroz", 20.00, "Acompanhamento", "Arroz branco soltinho"),
+          MenuItem(8, "Farofa", 30.00, "Acompanhamento", "Farofa de bacon bem temperada"),
+        ];
+        types = ["Pratos Principais", "Bebidas", "Acompanhamento"];
+        break;
+
+      case 2: // Iwata
+        menu = [
+          MenuItem(1, "Temaki", 10.00, "Pratos Principais", "Cone com arroz e salmão grelhado"),
+          MenuItem(2, "Joe", 20.00, "Pratos Principais", "Joe com salmão e cream cheese"),
+          MenuItem(3, "Gourlami", 30.00, "Pratos Principais", "Gourlami com cream cheese e cebolinha"),
+          MenuItem(5, "Cola-cola", 20.00, "Bebidas", "Cola-cola de 2 litros"),
+          MenuItem(6, "Água", 20.00, "Bebidas", "Água natural mineral de meio litro"),
+          MenuItem(10, "Petit-gateau", 20.00, "Sobremesas", "Bola de sorvete de creme com bolinho de chocolate"),
+          MenuItem(11, "Creme-brulee", 30.00, "Sobremesas", "Creme Brulee cremoso"),
+        ];
+        types = ["Pratos Principais", "Bebidas", "Sobremesas"];
+        break;
+
+      default: // Genérico
+        menu = [
+          MenuItem(1, "Comida 1", 10.00, "Comida", "Comida hmm"),
+          MenuItem(2, "Comida 2", 20.00, "Comida", "Comida hmm"),
+          MenuItem(3, "Comida 3", 30.00, "Comida", "Comida hmm"),
+          MenuItem(8, "Bebida 1", 20.00, "Bebida", "Bebida hmm"),
+          MenuItem(9, "Bebida 2", 10.00, "Bebida", "Bebida hmm"),
+          MenuItem(10, "Acompanhamento 1", 20.00, "Acompanhamento", "Acompanhamento hmm"),
+          MenuItem(11, "Acompanhamento 2", 30.00, "Acompanhamento", "Acompanhamento hmm"),
+        ];
+        types = ['Comida', 'Bebida', 'Acompanhamento'];
+        break;
+    }
+
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -60,7 +112,7 @@ class _TelaCardapio extends State<TelaCardapio> {
                 Align(
                     alignment: Alignment.topCenter,
                     child: Image.network(
-                      "https://images.pexels.com/photos/67468/pexels-photo-67468.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+                      widget.restaurant.backgroundPictureUrl,
                       height: 300,
                       fit: BoxFit.cover,
                     )
@@ -72,7 +124,7 @@ class _TelaCardapio extends State<TelaCardapio> {
                       Expanded(
                         flex: 6,
                         child: Text(
-                          "Costela no Bafo",
+                          widget.restaurant.name,
                           style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                         ),
@@ -91,7 +143,13 @@ class _TelaCardapio extends State<TelaCardapio> {
                               icon: Icon(Icons.location_pin,
                                   color: Theme.of(context).colorScheme.primary),
                               color: Theme.of(context).colorScheme.onPrimary,
-                              onPressed: () => {Navigator.pop(context)},
+                              onPressed: () => {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Localização copiada.'),
+                                    )
+                                )
+                              },
                             ),
                           ),
                         ),
@@ -110,7 +168,13 @@ class _TelaCardapio extends State<TelaCardapio> {
                               icon: Icon(Icons.favorite,
                                   color: Theme.of(context).colorScheme.primary),
                               color: Theme.of(context).colorScheme.onPrimary,
-                              onPressed: () => {Navigator.pop(context)},
+                              onPressed: () => {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Restaurante favoritado.'),
+                                    )
+                                )
+                              },
                             ),
                           ),
                         ),
@@ -124,12 +188,12 @@ class _TelaCardapio extends State<TelaCardapio> {
                     children: [
                       Row(
                         children: [
-                          SizedBox(width: 70, child: smallInfoContainer(Icons.star, "5")),
+                          SizedBox(width: 70, child: smallInfoContainer(Icons.star, widget.restaurant.rating.toString())),
                         ],
                       ),
                       SizedBox(height: 20),
                       Text(
-                          "Pratos de carne grelhados de estilo familiar, combinados com cerveja e cocktails em um ambiente rústico e animado.",
+                          widget.restaurant.description,
                         textScaleFactor: 1.1,
                       ),
                       SizedBox(height: 20),
@@ -138,7 +202,12 @@ class _TelaCardapio extends State<TelaCardapio> {
                             minimumSize: const Size(300, 50),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Reservation()),
+                          );
+                        },
                         child: const Text(
                           'Reservar',
                           style: TextStyle(fontWeight: FontWeight.bold),

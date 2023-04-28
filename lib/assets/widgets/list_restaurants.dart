@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/restaurant_card.dart';
 import '../../models/restaurant.dart';
 
-Widget listRestaurants(List<Restaurant> restaurantList){
+Widget listRestaurants(List<Restaurant> restaurantList, BuildContext context){
   // TODO: Pegar restaurantes na nuvem
 
   // TODO: Associar os dados aos modelos
@@ -12,7 +12,7 @@ Widget listRestaurants(List<Restaurant> restaurantList){
       scrollDirection: Axis.vertical,
       itemCount: restaurantList.length,
       itemBuilder: (BuildContext context, int index) {
-        return restaurantCard(restaurantList[index].name, restaurantList[index].backgroundPictureUrl, restaurantList[index].rating.toString());
+        return restaurantCard(restaurantList[index], context);
       }
   );
 }
