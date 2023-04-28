@@ -7,7 +7,6 @@ class Restaurant {
   final String workHours;
   final int rating;
   final String type;
-  final Menu restaurantMenu;
   String description = "";
   String backgroundPictureUrl = "";
   String iconPictureUrl = "";
@@ -22,6 +21,5 @@ class Restaurant {
       this.description,
       this.backgroundPictureUrl,
       this.iconPictureUrl,
-      this.restaurantMenu
       );
 }
