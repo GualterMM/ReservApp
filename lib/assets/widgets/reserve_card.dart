@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/small_info_container.dart';
 import 'package:reservapp/models/reservation.dart';
 
-Widget reserveCard (name, date, time, guests){
-  Map<String, dynamic> dayMonth = getDayMonth(date);
+Widget reserveCard (Reservation reservation){
+  Map<String, dynamic> dayMonth = getDayMonth(reservation);
 
   return SizedBox(
     height: 100,
@@ -24,15 +24,15 @@ Widget reserveCard (name, date, time, guests){
                 ],
               )
           ),
-          Expanded(flex: 5, child: Text(name)),
+          Expanded(flex: 5, child: Text(reservation.restaurantName)),
           Expanded(
               flex: 3,
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  smallInfoContainer(Icons.timelapse, time),
-                  smallInfoContainer(Icons.people, guests),
+                  smallInfoContainer(Icons.timelapse, reservation.time),
+                  smallInfoContainer(Icons.people, reservation.guests),
                 ]
               )
           ),

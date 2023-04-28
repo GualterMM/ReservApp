@@ -71,7 +71,7 @@ Widget listReservations(List<Reservation> reservationList){
       scrollDirection: Axis.vertical,
       itemCount: reservationList.length,
       itemBuilder: (BuildContext context, int index) {
-        return reserveCard(reservationList[index].restaurantName, reservationList[index].date, reservationList[index].time, reservationList[index].guests);
+        return reserveCard(reservationList[index]);
       }
   );
 }
