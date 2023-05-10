@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/models/reservation.dart';
 import 'package:reservapp/screens/home_page.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:reservapp/screens/restaurant_rating.dart';
+import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
-class Reservation extends StatelessWidget {
-  Reservation({super.key});
+class Reservation extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState(){
+    return _Reservation();
+  }
+}
 
-  DateTime date = DateTime(2023, 04, 27);
+class _Reservation extends State<Reservation> {
+  DateTime? date = DateTime(2023, 04, 27);
+  TimeOfDay? time = const TimeOfDay(hour: 19, minute: 00);
+  var qt_people = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +41,13 @@ class Reservation extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0, bottom: 20.0),
+                  padding: EdgeInsets.only(top: 20.0, bottom: 10.0),
                   child: Material(
                     elevation: 10,
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 80,
-                      width: 180,
+                      height: 70,
+                      width: 160,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -47,7 +56,7 @@ class Reservation extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.only(left: 10),
                             child: Icon(
                               color: Theme.of(context).colorScheme.primary,
                               Icons.calendar_month_outlined,
@@ -56,37 +65,43 @@ class Reservation extends StatelessWidget {
                           ),
                           GestureDetector(
                               child: Padding(
-                                padding: EdgeInsets.only(left: 20),
+                                padding: EdgeInsets.only(left: 6),
                                 child: Text(
-                                  '28/04/2023',
+                                  '${date!.day.toString()}/${date!.month.toString()}/${date!.year.toString()}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.normal,
+                                      fontSize: 18.0,
                                       color: Theme.of(context)
                                           .colorScheme
                                           .primary),
                                 ),
                               ),
                               onTap: () async {
-                                showDatePicker(
+                                DateTime? newDate = await showDatePicker(
                                   context: context,
-                                  initialDate: date,
-                                  firstDate: DateTime(1900),
+                                  initialDate: date!,
+                                  firstDate: DateTime(2000),
                                   lastDate: DateTime(2100),
                                 );
-                              })
+                                if (newDate != null){
+                                  setState(() {
+                                  date = newDate;
+                                });
+                              }
+                                })
                         ],
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0, bottom: 20.0),
+                  padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: Material(
                     elevation: 10,
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 80,
-                      width: 180,
+                      height: 70,
+                      width: 160,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -95,58 +110,52 @@ class Reservation extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: EdgeInsets.only(left: 10),
                             child: Icon(
                               color: Theme.of(context).colorScheme.primary,
                               Icons.schedule,
                               size: 40,
                             ),
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 20.0),
-                              child: Text(
-                                '20:00',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
-                              ))
-                          // GestureDetector(
-                          //     child: Padding(
-                          //       padding: EdgeInsets.only(left: 20),
-                          //       child: Text(
-                          //         '28/04/2023',
-                          //         style: TextStyle(
-                          //             fontWeight: FontWeight.normal,
-                          //             color: Theme
-                          //                 .of(context)
-                          //                 .colorScheme
-                          //                 .primary),
-                          //       ),
-                          //     ),
-                          //     onTap: () async {
-                          //       showDatePicker(
-                          //         context: context,
-                          //         initialDate: date,
-                          //         firstDate: DateTime(1900),
-                          //         lastDate: DateTime(2100),
-                          //
-                          //       );
-                          //     }
-                          // )
+                          GestureDetector(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: Text(
+                                  '${time!.hour.toString()}:${time!.minute.toString()}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 24.0,
+                                      color: Theme
+                                          .of(context)
+                                          .colorScheme
+                                          .primary),
+                                ),
+                              ),
+                              onTap: () async {
+                                TimeOfDay? newTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: time!,
+                                );
+                                if (newTime != null){
+                                  setState(() {
+                                    time = newTime;
+                                  });
+                                }
+                              }
+                          )
                         ],
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 40.0, bottom: 20.0),
+                  padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: Material(
                     elevation: 10,
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 80,
-                      width: 180,
+                      height: 70,
+                      width: 160,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -162,27 +171,39 @@ class Reservation extends StatelessWidget {
                               size: 40,
                             ),
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(left: 20.0),
-                              child: Align(
-                                alignment: Alignment.center,
-                                child:
-                                  Text(
-                                    '2',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        color:
-                                        Theme.of(context).colorScheme.primary),
-                                  )
-                              ))
-
+                          GestureDetector(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 25.0),
+                                child: Text(
+                                  '${qt_people}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 24.0,
+                                      color: Theme
+                                          .of(context)
+                                          .colorScheme
+                                          .primary),
+                                ),
+                              ),
+                              onTap: () async {
+                                showMaterialNumberPicker(
+                                  headerColor: Theme.of(context).colorScheme.primary,
+                                  title: 'Número de pessoas',
+                                  context: context,
+                                  minNumber: 1,
+                                  maxNumber: 20,
+                                  selectedNumber: qt_people,
+                                  onChanged: (value) => setState(() => qt_people = value),
+                                );
+                                }
+                          )
                         ],
                       ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 45.0, left: 20.0, right: 20.0),
+                  padding: EdgeInsets.only(top: 10.0, left: 20.0, right: 20.0),
                   child: const ConfirmButton(),
                 ),
               ],
