@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/main.dart';
-import 'package:reservapp/models/menu_item.dart';
 import 'package:reservapp/screens/check_reservations.dart';
 import 'package:reservapp/screens/favorite_restaurants.dart';
-import 'package:reservapp/screens/restaurant_menu.dart';
-
 import '../assets/widgets/list_restaurants.dart';
-import '../assets/widgets/restaurant_card.dart';
-import '../models/menu.dart';
 import '../models/restaurant.dart';
 
 class HomePage extends StatelessWidget {

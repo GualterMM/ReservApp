@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:reservapp/screens/home_page.dart';
 
 class RegistrationSucess extends StatelessWidget {
+  const RegistrationSucess({super.key});
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -12,6 +14,8 @@ class RegistrationSucess extends StatelessWidget {
 }
 
 class TelaBemVindo extends StatelessWidget {
+  const TelaBemVindo({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -92,13 +96,5 @@ class _ContinueButton extends State<ContinueButton> {
         ),
       ),
     );
-  }
-}
-
-class SecondRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
   }
 }

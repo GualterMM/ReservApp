@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/list_menu.dart';
 import 'package:reservapp/assets/widgets/small_info_container.dart';

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:reservapp/models/reservation.dart';
 import 'package:reservapp/screens/home_page.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
-import 'package:date_time_picker/date_time_picker.dart';
 import 'package:reservapp/screens/restaurant_rating.dart';
 import 'package:flutter_material_pickers/flutter_material_pickers.dart';
 
 class Reservation extends StatefulWidget{
+  const Reservation({super.key});
+
   @override
   State<StatefulWidget> createState(){
     return _Reservation();

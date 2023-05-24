@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/assets/widgets/list_restaurants.dart';
-
-import '../assets/widgets/restaurant_card.dart';
 import '../models/restaurant.dart';
 
 class FavoriteRestaurants extends StatelessWidget{
