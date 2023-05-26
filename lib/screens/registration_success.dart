@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:reservapp/models/user.dart';
 import 'package:reservapp/screens/home_page.dart';
 
 class RegistrationSucess extends StatelessWidget {
-  const RegistrationSucess({super.key});
+  final String user;
+  const RegistrationSucess({super.key, required this.user});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TelaBemVindo(),
+      body: TelaBemVindo(user: user,),
     );
   }
 }
 
 class TelaBemVindo extends StatelessWidget {
-  const TelaBemVindo({super.key});
+  final String user;
+  const TelaBemVindo({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class TelaBemVindo extends StatelessWidget {
         ),
         congratsText,
         congratsSubtext,
-        const ContinueButton(),
+        ContinueButton(user: user,),
       ],
     );
   }
@@ -65,7 +67,8 @@ Widget congratsSubtext = const Padding(
     ));
 
 class ContinueButton extends StatefulWidget {
-  const ContinueButton({super.key});
+  final String user;
+  const ContinueButton({super.key, required this.user});
 
   @override
   State<ContinueButton> createState() => _ContinueButton();
@@ -85,7 +88,7 @@ class _ContinueButton extends State<ContinueButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage(user: widget.user)),
           )
         },
         child: const Text(

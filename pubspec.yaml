@@ -39,6 +39,8 @@ dependencies:
   sliver_tools: ^0.2.10
   date_time_picker: ^2.1.0
   flutter_material_pickers: ^3.3.0
+  http: ^0.13.6
+  flutter_session_manager: ^1.0.3
 
 dev_dependencies:
   flutter_test:

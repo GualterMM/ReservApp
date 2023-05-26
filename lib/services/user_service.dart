@@ -1,4 +1,6 @@
+import "package:reservapp/models/user.dart";
+
 abstract class UserService{
-  void userRegister(String name, String email, String password);
-  void userLogin(String email, String password);
+  Future<User> userRegister(String name, String email, String password);
+  Future<User> userLogin(String email, String password);
 }

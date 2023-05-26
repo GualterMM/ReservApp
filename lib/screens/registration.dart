@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
+import 'package:reservapp/controllers/user_controller.dart';
+import 'package:reservapp/implementations/user_manager.dart';
+import 'package:reservapp/models/user.dart';
 import 'package:reservapp/screens/registration_success.dart';
 
 class Registration extends StatelessWidget {
-  const Registration({super.key});
+  Registration({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +65,16 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationForm extends State<RegistrationForm> {
+  UserController userController = UserController(UserManager());
   final _formKey = GlobalKey<FormState>();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    Future<User> user;
+
     return Form(
         key: _formKey,
         child: Column(
@@ -73,6 +82,7 @@ class _RegistrationForm extends State<RegistrationForm> {
             Padding(
               padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: TextFormField(
+                controller: nameController,
                 keyboardType: TextInputType.name,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -89,6 +99,7 @@ class _RegistrationForm extends State<RegistrationForm> {
             Padding(
               padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: TextFormField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -105,6 +116,7 @@ class _RegistrationForm extends State<RegistrationForm> {
             Padding(
               padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: TextFormField(
+                controller: passwordController,
                 obscureText: true,
                 obscuringCharacter: "*",
                 decoration: const InputDecoration(
@@ -133,18 +145,26 @@ class _RegistrationForm extends State<RegistrationForm> {
                     minimumSize: const Size(300, 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () => {
+                onPressed: () async {
                   if(_formKey.currentState!.validate()){
-                    // TODO: Adicionar a lógica do back-end para adicionar o usuário e deixar ele logado.
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegistrationSucess()),
-                    )
+                    await userController.registerUser(nameController.text, emailController.text, passwordController.text)
+                    .then((user) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationSucess(user: user.name,)),
+                      );
+                    })
+                    .catchError((error, stack) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Erro: $error'))
+                      );
+                      throw error;
+                    });
                   } else{
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Falha ao cadastrar, tente novamente.'))
-                    )
+                    );
                   }
                 },
                 child: const Text(

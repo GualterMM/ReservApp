@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:reservapp/main.dart';
 import 'package:reservapp/screens/check_reservations.dart';
 import 'package:reservapp/screens/favorite_restaurants.dart';
 import '../assets/widgets/list_restaurants.dart';
 import '../models/restaurant.dart';
+import '../models/user.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomePage extends StatefulWidget{
+  //TODO: Remover urgentemente esses users de TODAS as telas usando isso; achar alguma maneira de usar o Session
+  String user;
+  HomePage({super.key, this.user = "Usuário"});
+
+  @override
+  State<HomePage> createState() => _HomePage();
+
+}
+
+class _HomePage extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +25,6 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: showCity,
         centerTitle: true,
-
         elevation: 0,
       ),
 
@@ -32,13 +42,13 @@ class HomePage extends StatelessWidget {
             SizedBox(
               height: 90,
               child: DrawerHeader(
-                child: ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text("Usuário"),
-                  trailing: Icon(Icons.edit),
-                ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
+                ),
+                child: ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text(widget.user),
+                  trailing: Icon(Icons.edit),
                 ),
               ),
             ),
@@ -62,7 +72,10 @@ class HomePage extends StatelessWidget {
             ),
             ListTile(
               title: const Text('Sair'),
-              onTap: () {
+              onTap: () async {
+                User user = User.fromJson(await SessionManager().get("user"));
+                debugPrint(user.name);
+                await SessionManager().destroy();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const MyApp()),
@@ -74,7 +87,80 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
 }
+
+// class HomePage extends StatelessWidget {
+//   HomePage({super.key});
+//
+//   User user = User.fromJson(await SessionManager().get('user'));
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: showCity,
+//         centerTitle: true,
+//         elevation: 0,
+//       ),
+//
+//       body: ListView(
+//         children: const [
+//           SearchRestaurant(),
+//           FilterList(),
+//           RestaurantList(),
+//         ],
+//       ),
+//
+//       drawer: Drawer(
+//         child: ListView(
+//           children: [
+//             SizedBox(
+//               height: 90,
+//               child: DrawerHeader(
+//                 child: ListTile(
+//                   leading: Icon(Icons.person),
+//                   title: Text("Usuário"),
+//                   trailing: Icon(Icons.edit),
+//                 ),
+//                 decoration: BoxDecoration(
+//                   color: Theme.of(context).colorScheme.primary,
+//                 ),
+//               ),
+//             ),
+//             ListTile(
+//               title: const Text('Minhas Reservas'),
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => const CheckReservations()),
+//                 );
+//               },
+//             ),
+//             ListTile(
+//               title: const Text('Favoritos'),
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => const FavoriteRestaurants()),
+//                 );
+//               },
+//             ),
+//             ListTile(
+//               title: const Text('Sair'),
+//               onTap: () {
+//                 Navigator.push(
+//                   context,
+//                   MaterialPageRoute(builder: (context) => const MyApp()),
+//                 );
+//               },
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
 
 Widget showCity = GestureDetector(
     onTap: () => debugPrint('Location Selector'),

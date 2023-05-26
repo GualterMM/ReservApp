@@ -74,7 +74,7 @@ class _EnterButton extends State<EnterButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage()),
           )
         },
         child: const Text(
@@ -153,7 +153,7 @@ class _LoginForm extends State<LoginForm> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const HomePage()),
+                          builder: (context) => HomePage()),
                     )
                   } else{
                     ScaffoldMessenger.of(context).showSnackBar(
