@@ -73,13 +73,12 @@ class _HomePage extends State<HomePage>{
             ListTile(
               title: const Text('Sair'),
               onTap: () async {
-                User user = User.fromJson(await SessionManager().get("user"));
-                debugPrint(user.name);
-                await SessionManager().destroy();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyApp()),
-                );
+                await SessionManager().destroy().then((value) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyApp()),
+                  );
+                });
               },
             ),
           ],

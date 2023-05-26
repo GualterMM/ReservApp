@@ -19,9 +19,12 @@ class UserManager implements UserService {
     final url = Uri(
       scheme: 'http',
       host: baseUrl,
+      port: 8000,
       path: path,
-      queryParameters: {'email': email, 'senha': password}
+      queryParameters: {'q': email}
     );
+
+    debugPrint(url.toString());
 
     try{
       response = await http.get(url);
@@ -29,12 +32,19 @@ class UserManager implements UserService {
       rethrow;
     }
 
-    if(response.statusCode == 200){
-      var jsonResponse = jsonDecode(utf8.decode(response.bodyBytes)) as Map;
-      user = User(jsonResponse['id'] as int, jsonResponse['nome']!, jsonResponse['email']!, jsonResponse['senha']!, jsonResponse['fotoURL']!);
-      await SessionManager().set("user", user);
-      User debugUser = User.fromJson(await SessionManager().get("user"));
-      debugPrint(debugUser.name);
+    //TODO: Tratar o caso de email inexistente, que não chega no último else.
+    if(response.statusCode == 200 && response.body.isNotEmpty){
+      final jsonResponse = json.decode(response.body);
+      user = User.fromJson(jsonResponse[0]);
+      if(user.password == password){
+        await SessionManager().set("user", user);
+        User debugUser = User.fromJson(await SessionManager().get("user"));
+        debugPrint(debugUser.name);
+      } else{
+        throw "Senha incorreta.";
+      }
+    } else{
+      throw "O email inserido não possui conta cadastrada.";
     }
 
     return user;

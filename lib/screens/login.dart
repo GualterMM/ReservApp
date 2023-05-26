@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/screens/home_page.dart';
 
+import '../controllers/user_controller.dart';
+import '../implementations/user_manager.dart';
+
 class Login extends StatelessWidget {
   const Login({super.key});
 
@@ -98,7 +101,10 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginForm extends State<LoginForm> {
+  UserController userController = UserController(UserManager());
   final _formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +115,7 @@ class _LoginForm extends State<LoginForm> {
             Padding(
               padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
               child: TextFormField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -125,6 +132,7 @@ class _LoginForm extends State<LoginForm> {
             Padding(
               padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
               child: TextFormField(
+                controller: passwordController,
                 obscureText: true,
                 obscuringCharacter: "*",
                 decoration: const InputDecoration(
@@ -147,18 +155,26 @@ class _LoginForm extends State<LoginForm> {
                     minimumSize: const Size(300, 50),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: () => {
+                onPressed: () async {
                   if(_formKey.currentState!.validate()){
-                    // TODO: Adicionar a lógica do back-end para adicionar o usuário e deixar ele logado.
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage()),
-                    )
+                    await userController.loginUser(emailController.text, passwordController.text)
+                        .then((user) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => HomePage(user: user.name,)),
+                      );
+                    })
+                        .catchError((error, stack) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Erro: $error'))
+                      );
+                      throw error;
+                    });
                   } else{
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Falha ao logar, tente novamente.'))
-                    )
+                    );
                   }
                 },
                 child: const Text(
