@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/controllers/user_controller.dart';
-import 'package:reservapp/implementations/user_manager.dart';
 import 'package:reservapp/models/user.dart';
 import 'package:reservapp/screens/registration_success.dart';
+import 'package:reservapp/services/user_service.dart';
 
 class Registration extends StatelessWidget {
   Registration({super.key});
@@ -65,22 +65,21 @@ class RegistrationForm extends StatefulWidget {
 }
 
 class _RegistrationForm extends State<RegistrationForm> {
-  UserController userController = UserController(UserManager());
   final _formKey = GlobalKey<FormState>();
+  UserController userController = UserController(UserService());
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    Future<User> user;
-
     return Form(
         key: _formKey,
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+              padding:
+                  const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: TextFormField(
                 controller: nameController,
                 keyboardType: TextInputType.name,
@@ -97,7 +96,8 @@ class _RegistrationForm extends State<RegistrationForm> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+              padding:
+                  const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -114,16 +114,16 @@ class _RegistrationForm extends State<RegistrationForm> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
+              padding:
+                  const EdgeInsets.only(top: 35.0, left: 20.0, right: 20.0),
               child: TextFormField(
                 controller: passwordController,
                 obscureText: true,
                 obscuringCharacter: "*",
                 decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  labelText: 'Senha',
-                  errorMaxLines: 3
-                ),
+                    border: UnderlineInputBorder(),
+                    labelText: 'Senha',
+                    errorMaxLines: 3),
                 validator: (value) {
                   RegExp regex = RegExp(
                       r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
@@ -146,25 +146,32 @@ class _RegistrationForm extends State<RegistrationForm> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () async {
-                  if(_formKey.currentState!.validate()){
-                    await userController.registerUser(nameController.text, emailController.text, passwordController.text)
-                    .then((user) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegistrationSucess(user: user.name,)),
-                      );
-                    })
-                    .catchError((error, stack) {
+                  if (_formKey.currentState!.validate()) {
+                    await userController
+                        .registerUser(nameController.text, emailController.text,
+                            passwordController.text)
+                        .then((jsonResponse) {
+                      if (jsonResponse.containsKey("error")) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Erro: ${jsonResponse['error']}')));
+                      } else {
+                        User user = User.fromJson(jsonResponse);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegistrationSucess(
+                                    user: user.name,
+                                  )),
+                        );
+                      }
+                    }).catchError((error, stack) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Erro: $error'))
-                      );
+                          SnackBar(content: Text('Erro: $error')));
                       throw error;
                     });
-                  } else{
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Falha ao cadastrar, tente novamente.'))
-                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Falha ao cadastrar, tente novamente.')));
                   }
                 },
                 child: const Text(

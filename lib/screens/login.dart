@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/screens/home_page.dart';
-
+import 'package:reservapp/services/user_service.dart';
 import '../controllers/user_controller.dart';
-import '../implementations/user_manager.dart';
+import '../models/user.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -101,8 +101,8 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginForm extends State<LoginForm> {
-  UserController userController = UserController(UserManager());
   final _formKey = GlobalKey<FormState>();
+  UserController userController = UserController(UserService());
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -113,7 +113,8 @@ class _LoginForm extends State<LoginForm> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+              padding:
+                  const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
               child: TextFormField(
                 controller: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -130,7 +131,8 @@ class _LoginForm extends State<LoginForm> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
+              padding:
+                  const EdgeInsets.only(top: 25.0, left: 20.0, right: 20.0),
               child: TextFormField(
                 controller: passwordController,
                 obscureText: true,
@@ -156,25 +158,32 @@ class _LoginForm extends State<LoginForm> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () async {
-                  if(_formKey.currentState!.validate()){
-                    await userController.loginUser(emailController.text, passwordController.text)
-                        .then((user) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => HomePage(user: user.name,)),
-                      );
-                    })
-                        .catchError((error, stack) {
+                  if (_formKey.currentState!.validate()) {
+                    await userController
+                        .loginUser(
+                            emailController.text, passwordController.text)
+                        .then((jsonResponse) {
+                      if (jsonResponse.containsKey("error")) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('Erro: ${jsonResponse['error']}')));
+                      } else {
+                        User user = User.fromJson(jsonResponse);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => HomePage(
+                                    user: user.name,
+                                  )),
+                        );
+                      }
+                    }).catchError((error, stack) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Erro: $error'))
-                      );
+                          SnackBar(content: Text('Erro: $error')));
                       throw error;
                     });
-                  } else{
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Falha ao logar, tente novamente.'))
-                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Falha ao logar, tente novamente.')));
                   }
                 },
                 child: const Text(
