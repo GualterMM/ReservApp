@@ -1,3 +1,5 @@
+.dart_tool
+
 # Built application files
 *.apk
 *.aar
@@ -38,7 +40,7 @@ captures/
 
 # IntelliJ
 *.iml
-.idea
+.idea/
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
