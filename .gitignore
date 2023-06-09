@@ -1,6 +1,7 @@
 .dart_tool
 .flutter-plugins
 .flutter-plugins-dependencies
+/test/*.mocks.dart
 
 # Built application files
 *.apk
