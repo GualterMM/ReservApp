@@ -1,0 +1,33 @@
+name: Flutter Unit Tests
+on:
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    name: Run unit tests on all relevant Dart classes
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+          cache: 'gradle'
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Get Flutter Pub Dependencies
+        run: flutter pub get
+
+      - name: Generate Mocks
+        run: dart run build_runner build
+
+      - name: Run Tests
+        run: flutter test

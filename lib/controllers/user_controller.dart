@@ -70,7 +70,7 @@ class UserController implements IUserController{
       case 404:
         return {'error': 'Usuário não existe'};
       case 500:
-        return {'error': 'Erro na conexão do servidor'};
+        return {'error': 'Erro na conexão com o servidor'};
       default:
         return {'error': 'Erro ${response.statusCode}\n${response.body}'};
     }
