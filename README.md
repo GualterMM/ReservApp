@@ -1,3 +1,5 @@
+![workflow](https://github.com/GualterMM/ReservApp/actions/workflows/flutter-pipeline.yml/badge.svg)  
+
 # ReservAPP
 
 Aplicativo mobile para Android e iOS para fazer reservas em restaurantes.
