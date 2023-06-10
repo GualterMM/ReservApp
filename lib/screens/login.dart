@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
+import 'package:reservapp/auth/local_storage.dart';
 import 'package:reservapp/screens/home_page.dart';
 import 'package:reservapp/services/user_service.dart';
 import '../controllers/user_controller.dart';
@@ -77,7 +78,7 @@ class _EnterButton extends State<EnterButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           )
         },
         child: const Text(
@@ -162,19 +163,25 @@ class _LoginForm extends State<LoginForm> {
                     await userController
                         .loginUser(
                             emailController.text, passwordController.text)
-                        .then((jsonResponse) {
+                        .then((jsonResponse) async {
                       if (jsonResponse.containsKey("error")) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('Erro: ${jsonResponse['error']}')));
                       } else {
                         User user = User.fromJson(jsonResponse);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage(
-                                    user: user.name,
-                                  )),
-                        );
+                        await LocalStorage()
+                            .setUser(user.idUser, user.email, user.name,
+                                user.pictureUrl)
+                            .then((boolean) {
+                          if (boolean == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Não foi possível armazenar as informações do servidor. Verifique a memória do dispositivo.')));
+                          } else {
+                            Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                          }
+                        });
                       }
                     }).catchError((error, stack) {
                       ScaffoldMessenger.of(context).showSnackBar(

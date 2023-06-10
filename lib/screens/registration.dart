@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/back_button.dart';
 import 'package:reservapp/controllers/user_controller.dart';
 import 'package:reservapp/models/user.dart';
-import 'package:reservapp/screens/registration_success.dart';
 import 'package:reservapp/services/user_service.dart';
 
+import '../auth/local_storage.dart';
+
 class Registration extends StatelessWidget {
-  Registration({super.key});
+  const Registration({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -150,19 +151,25 @@ class _RegistrationForm extends State<RegistrationForm> {
                     await userController
                         .registerUser(nameController.text, emailController.text,
                             passwordController.text)
-                        .then((jsonResponse) {
+                        .then((jsonResponse) async {
                       if (jsonResponse.containsKey("error")) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             content: Text('Erro: ${jsonResponse['error']}')));
                       } else {
                         User user = User.fromJson(jsonResponse);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => RegistrationSucess(
-                                    user: user.name,
-                                  )),
-                        );
+                        await LocalStorage()
+                            .setUser(user.idUser, user.email, user.name,
+                                user.pictureUrl)
+                            .then((boolean) {
+                          if (boolean == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Não foi possível armazenar as informações do servidor. Verifique a memória do dispositivo.')));
+                          } else {
+                            Navigator.of(context).pushNamedAndRemoveUntil('/home', (route) => false);
+                          }
+                        });
                       }
                     }).catchError((error, stack) {
                       ScaffoldMessenger.of(context).showSnackBar(

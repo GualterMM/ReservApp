@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:reservapp/auth/local_storage.dart';
 import 'package:reservapp/screens/home_page.dart';
 import 'package:reservapp/screens/login.dart';
 import 'package:reservapp/screens/registration.dart';
-
+import 'package:reservapp/screens/registration_success.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  LocalStorage();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -35,11 +37,17 @@ class MyApp extends StatelessWidget {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(foregroundColor: const Color(0xFFF58008)),
         ),
-        //primarySwatch: Colors.orange,
+        fontFamily: 'Quicksand',
 
-        fontFamily: 'Quicksand'
       ),
-      home: const TelaBemVindo(),
+      initialRoute: '/',
+      routes: {
+        '/' : (context) => const TelaBemVindo(),
+        '/login' : (context) => const Login(),
+        '/register' : (context) => const Registration(),
+        '/register/success' : (context) => const RegistrationSucess(),
+        '/home' : (context) => const HomePage(),
+      },
     );
   }
 }

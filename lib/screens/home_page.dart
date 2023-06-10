@@ -1,23 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:reservapp/main.dart';
+import 'package:reservapp/auth/local_storage.dart';
 import 'package:reservapp/screens/check_reservations.dart';
 import 'package:reservapp/screens/favorite_restaurants.dart';
 import '../assets/widgets/list_restaurants.dart';
 import '../models/restaurant.dart';
 import '../models/user.dart';
 
-class HomePage extends StatefulWidget{
-  //TODO: Remover urgentemente esses users de TODAS as telas usando isso; achar alguma maneira de usar o Session
-  String user;
-  HomePage({super.key, this.user = "Usuário"});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePage();
-
 }
 
-class _HomePage extends State<HomePage>{
+class _HomePage extends State<HomePage> {
+  late Future<User>? _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _myFuture();
+  }
+
+  Future<User> _myFuture() async {
+    Map<String, dynamic> defaultUser = {
+      'id': 0,
+      'nome': 'Usuário',
+      'email': '',
+      'fotoURL': 'd'
+    };
+
+    User? futureUser = await LocalStorage().getUser();
+    User user = futureUser ?? User.fromJson(defaultUser);
+
+    return user;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +44,6 @@ class _HomePage extends State<HomePage>{
         centerTitle: true,
         elevation: 0,
       ),
-
       body: ListView(
         children: const [
           SearchRestaurant(),
@@ -35,7 +51,6 @@ class _HomePage extends State<HomePage>{
           RestaurantList(),
         ],
       ),
-
       drawer: Drawer(
         child: ListView(
           children: [
@@ -45,10 +60,30 @@ class _HomePage extends State<HomePage>{
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                child: ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text(widget.user),
-                  trailing: Icon(Icons.edit),
+                child: FutureBuilder<User>(
+                  future: _future,
+                  builder: (context, snapshot) {
+                    Widget child;
+                    if (snapshot.hasData) {
+                      child = ListTile(
+                        leading: CircleAvatar(
+                          radius: 15.0,
+                          backgroundColor: Theme.of(context).colorScheme.onTertiary,
+                          child: Image.network(
+                            snapshot.data!.pictureUrl,
+                            errorBuilder: (context, exception, stacktrace) {
+                              return Image.asset('lib/assets/images/default_icon.png');
+                            },
+                          ),
+                        ),
+                        title: Text(snapshot.data!.name),
+                        trailing: const Icon(Icons.edit),
+                      );
+                    } else {
+                      child = const CircularProgressIndicator();
+                    }
+                    return child;
+                  },
                 ),
               ),
             ),
@@ -57,7 +92,8 @@ class _HomePage extends State<HomePage>{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const CheckReservations()),
+                  MaterialPageRoute(
+                      builder: (context) => const CheckReservations()),
                 );
               },
             ),
@@ -66,18 +102,16 @@ class _HomePage extends State<HomePage>{
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const FavoriteRestaurants()),
+                  MaterialPageRoute(
+                      builder: (context) => const FavoriteRestaurants()),
                 );
               },
             ),
             ListTile(
               title: const Text('Sair'),
               onTap: () async {
-                await SessionManager().destroy().then((value) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const MyApp()),
-                  );
+                await LocalStorage().removeUser().then((value) {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
                 });
               },
             ),
@@ -86,7 +120,6 @@ class _HomePage extends State<HomePage>{
       ),
     );
   }
-
 }
 
 // class HomePage extends StatelessWidget {
@@ -173,8 +206,7 @@ Widget showCity = GestureDetector(
           style: TextStyle(fontWeight: FontWeight.normal),
         )
       ],
-    )
-);
+    ));
 
 class SearchRestaurant extends StatefulWidget {
   const SearchRestaurant({super.key});
@@ -222,6 +254,7 @@ class FilterList extends StatefulWidget {
 
 class _FilterList extends State<FilterList> {
   static const spacer = SizedBox(width: 12);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -237,15 +270,15 @@ class _FilterList extends State<FilterList> {
                       borderRadius: BorderRadius.circular(10))),
               child: const Text("Todos")),
           spacer,
-          FilterButton("Japa"),
+          filterButton("Japa"),
           spacer,
-          FilterButton("Pizza"),
+          filterButton("Pizza"),
           spacer,
-          FilterButton("Hamburguer"),
+          filterButton("Hamburguer"),
           spacer,
-          FilterButton("Esfirra"),
+          filterButton("Esfirra"),
           spacer,
-          FilterButton("Marmita"),
+          filterButton("Marmita"),
         ],
       ),
     );
@@ -263,10 +296,38 @@ class _RestaurantList extends State<RestaurantList> {
   // Teste dos modelos
   // TODO: Remover esse teste
   late List<Restaurant> restaurantList = [
-    Restaurant(1, "Costela no Bafo", "PA", "12h00 - 17h00", 4, "R", "Pratos de carne grelhados de estilo familiar, combinados com cerveja e cocktails em um ambiente rústico e animado.", "https://media-cdn.tripadvisor.com/media/photo-s/05/c2/83/34/costela-no-bafo.jpg", ""),
-    Restaurant(2, "Iwata Sushi", "PA", "19h00 - 23h00", 5, "K", "Rodízio de sushi em Pouso Alegre", "https://pr0.nicelocal.br.com/l-H8-PM_PWuAyv9z7-Ur-A/2000x1500,q75/4px-BW84_n3lJhgQGe6caI1vAfZfD8yOKqS4dO4Py5dVeCDAtW6xSQ3E2jFMD_F9x4cSVzPPFOz9KtIckfFPhOetq2LpWfalnI9_Dv1FNEerk4AgI1-JQHqN8sqFSM5oaRmT7TL6RHM", ""),
-    Restaurant(3, "Vereda", "PA", "19h00 - 23h00", 3, "P", "Pizza hmm", "https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800", ""),
+    Restaurant(
+        1,
+        "Costela no Bafo",
+        "PA",
+        "12h00 - 17h00",
+        4,
+        "R",
+        "Pratos de carne grelhados de estilo familiar, combinados com cerveja e cocktails em um ambiente rústico e animado.",
+        "https://media-cdn.tripadvisor.com/media/photo-s/05/c2/83/34/costela-no-bafo.jpg",
+        ""),
+    Restaurant(
+        2,
+        "Iwata Sushi",
+        "PA",
+        "19h00 - 23h00",
+        5,
+        "K",
+        "Rodízio de sushi em Pouso Alegre",
+        "https://pr0.nicelocal.br.com/l-H8-PM_PWuAyv9z7-Ur-A/2000x1500,q75/4px-BW84_n3lJhgQGe6caI1vAfZfD8yOKqS4dO4Py5dVeCDAtW6xSQ3E2jFMD_F9x4cSVzPPFOz9KtIckfFPhOetq2LpWfalnI9_Dv1FNEerk4AgI1-JQHqN8sqFSM5oaRmT7TL6RHM",
+        ""),
+    Restaurant(
+        3,
+        "Vereda",
+        "PA",
+        "19h00 - 23h00",
+        3,
+        "P",
+        "Pizza hmm",
+        "https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800",
+        ""),
   ];
+
   // Fim do teste dos modelos
 
   @override
@@ -279,11 +340,11 @@ class _RestaurantList extends State<RestaurantList> {
   }
 }
 
-Widget FilterButton(buttonText) {
+Widget filterButton(buttonText) {
   return FilledButton(
       onPressed: null,
       style: FilledButton.styleFrom(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       child: Text(buttonText));
 }

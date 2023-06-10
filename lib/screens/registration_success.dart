@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:reservapp/models/user.dart';
 import 'package:reservapp/screens/home_page.dart';
 
 class RegistrationSucess extends StatelessWidget {
-  final String user;
-  const RegistrationSucess({super.key, required this.user});
+  const RegistrationSucess({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TelaBemVindo(user: user,),
+    return const Scaffold(
+      body: TelaBemVindo(),
     );
   }
 }
 
 class TelaBemVindo extends StatelessWidget {
-  final String user;
-  const TelaBemVindo({super.key, required this.user});
+  const TelaBemVindo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +26,17 @@ class TelaBemVindo extends StatelessWidget {
           height: 240,
           fit: BoxFit.cover,
         ),
-        Container(
-          child: SizedBox(
-            height: 200,
-            width: 100,
-            child: Image.asset(
-              'lib/assets/images/success.png',
-              fit: BoxFit.fitHeight,
-            ),
+        SizedBox(
+          height: 200,
+          width: 100,
+          child: Image.asset(
+            'lib/assets/images/success.png',
+            fit: BoxFit.fitHeight,
           ),
         ),
         congratsText,
         congratsSubtext,
-        ContinueButton(user: user,),
+        const ContinueButton(),
       ],
     );
   }
@@ -67,8 +62,7 @@ Widget congratsSubtext = const Padding(
     ));
 
 class ContinueButton extends StatefulWidget {
-  final String user;
-  const ContinueButton({super.key, required this.user});
+  const ContinueButton({super.key});
 
   @override
   State<ContinueButton> createState() => _ContinueButton();
@@ -88,7 +82,7 @@ class _ContinueButton extends State<ContinueButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage(user: widget.user)),
+            MaterialPageRoute(builder: (context) => const HomePage()),
           )
         },
         child: const Text(

@@ -41,6 +41,7 @@ dependencies:
   flutter_material_pickers: ^3.3.0
   http: ^0.13.6
   flutter_session_manager: ^1.0.3
+  shared_preferences: ^2.1.2
 
 dev_dependencies:
   flutter_test:
