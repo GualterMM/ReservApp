@@ -10,7 +10,7 @@ import 'package:reservapp/assets/constants/consts.dart' as constants;
 @GenerateMocks([http.Client])
 void main() {
   group("RestaurantsService tests for fetching all restaurants", () {
-    late MockClient mockClient;
+    late http.Client mockClient;
     late RestaurantsService restaurantsService;
 
     setUp(() {
@@ -48,7 +48,7 @@ void main() {
   });
 
   group("RestaurantsService tests for fetching restaurants by type", () {
-    late MockClient mockClient;
+    late http.Client mockClient;
     late RestaurantsService restaurantsService;
     String type = 'P';
 
@@ -87,7 +87,7 @@ void main() {
   });
 
   group("RestaurantsService tests for fetching a restaurant by its name", () {
-    late MockClient mockClient;
+    late http.Client mockClient;
     late RestaurantsService restaurantsService;
     String name = 'Vereda';
 
