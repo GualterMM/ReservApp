@@ -17,10 +17,6 @@ class RestaurantsService implements IRestaurantService {
       rethrow;
     }
 
-    if(response.statusCode != 200){
-      throw Exception('${response.statusCode} - ${response.body}');
-    }
-
     return response;
   }
 
@@ -32,10 +28,6 @@ class RestaurantsService implements IRestaurantService {
       rethrow;
     }
 
-    if(response.statusCode != 200){
-      throw Exception('${response.statusCode} - ${response.body}');
-    }
-
     return response;
   }
 
@@ -45,10 +37,6 @@ class RestaurantsService implements IRestaurantService {
       response = await client.get(router.listRestaurantsRoute(constants.LOCAL_HOST));
     } catch(e){
       rethrow;
-    }
-
-    if(response.statusCode != 200){
-      throw Exception('${response.statusCode} - ${response.body}');
     }
 
     return response;

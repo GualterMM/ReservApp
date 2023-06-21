@@ -41,7 +41,7 @@ void main() {
 
     test("Should throw an exception on an unsuccessful request", () {
       when(mockClient.get(router.listRestaurantsRoute(constants.LOCAL_HOST)))
-          .thenAnswer((_) async => http.Response('Not Found', 404));
+          .thenThrow(Exception());
 
       expect(restaurantsService.getRestaurants(), throwsException);
     });
@@ -80,7 +80,7 @@ void main() {
 
     test("Should throw an exception on an unsuccessful request", () {
       when(mockClient.get(router.listRestaurantsByTypeRoute(constants.LOCAL_HOST, {'q' : type})))
-          .thenAnswer((_) async => http.Response('Not Found', 404));
+          .thenThrow(Exception());
 
       expect(restaurantsService.getRestaurantsByType(type), throwsException);
     });
@@ -119,7 +119,7 @@ void main() {
 
     test("Should throw an exception on an unsuccessful request", () {
       when(mockClient.get(router.listRestaurantByNameRoute(constants.LOCAL_HOST, name)))
-          .thenAnswer((_) async => http.Response('Not Found', 404));
+          .thenThrow(Exception());
 
       expect(restaurantsService.getRestaurantByName(name), throwsException);
     });
