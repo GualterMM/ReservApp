@@ -1,5 +1,4 @@
 // User endpoints
-import 'package:flutter/cupertino.dart';
 
 Uri userLoginRoute(String host, Map<String, dynamic> params){
   var url = Uri(
@@ -19,6 +18,42 @@ Uri userRegisterRoute(String host){
     host: host,
     port: 8000,
     path: 'usuarios/',
+  );
+
+  return url;
+}
+
+// Restaurant endpoints
+
+Uri listRestaurantsRoute(String host){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'restaurantes/',
+  );
+
+  return url;
+}
+
+Uri listRestaurantsByTypeRoute(String host, Map<String, dynamic> params){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'restaurantes/',
+    queryParameters: params,
+  );
+
+  return url;
+}
+
+Uri listRestaurantByNameRoute(String host, String name){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'restaurante/$name/',
   );
 
   return url;
