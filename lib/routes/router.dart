@@ -58,3 +58,15 @@ Uri listRestaurantByNameRoute(String host, String name){
 
   return url;
 }
+
+Uri listItemsByRestaurant(String host, Map<String, dynamic> params){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'itemcardapio/',
+    queryParameters: params,
+  );
+
+  return url;
+}
