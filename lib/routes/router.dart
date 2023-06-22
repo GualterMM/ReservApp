@@ -93,3 +93,26 @@ Uri postReservation(String host){
 
   return url;
 }
+
+Uri listFavorites(String host, Map<String, dynamic> params){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'restaurantefavorito/',
+    queryParameters: params,
+  );
+
+  return url;
+}
+
+Uri postFavorite(String host){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'restaurantefavorito/',
+  );
+
+  return url;
+}
