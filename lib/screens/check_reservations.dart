@@ -20,9 +20,10 @@ class TelaReservas extends StatelessWidget{
   TelaReservas({super.key});
 
   late List<Reservation> reservationList = [
-    Reservation(1, "21-03-2022", "15:40", 2, 3, "Costela no Bafo"),
-    Reservation(2, "15-07-2021", "17:00", 2, 3, "Costela no Bafo"),
-    Reservation(3, "30-12-2023", "22:40", 2, 3, "Costela no Bafo"),
+    // TODO: Consertar o nome no Card da Reserva
+    Reservation(1, "21-03-2022", "15:40", 2, 3, 1),
+    Reservation(2, "15-07-2021", "17:00", 2, 3, 1),
+    Reservation(3, "30-12-2023", "22:40", 2, 3, 1),
   ];
 
   @override

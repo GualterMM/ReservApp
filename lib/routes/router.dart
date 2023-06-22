@@ -70,3 +70,26 @@ Uri listItemsByRestaurant(String host, Map<String, dynamic> params){
 
   return url;
 }
+
+Uri listReservations(String host, Map<String, dynamic> params){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'reserva/',
+    queryParameters: params,
+  );
+
+  return url;
+}
+
+Uri postReservation(String host){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'reserva/',
+  );
+
+  return url;
+}
