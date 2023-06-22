@@ -10,6 +10,7 @@ Widget listRestaurants(List<Restaurant> restaurantList, BuildContext context){
   // Criar componente
   return ListView.builder(
       scrollDirection: Axis.vertical,
+      shrinkWrap: true,
       itemCount: restaurantList.length,
       itemBuilder: (BuildContext context, int index) {
         return restaurantCard(restaurantList[index], context);

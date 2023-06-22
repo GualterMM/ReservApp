@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/auth/local_storage.dart';
+import 'package:reservapp/controllers/restaurants_controller.dart';
 import 'package:reservapp/screens/check_reservations.dart';
 import 'package:reservapp/screens/favorite_restaurants.dart';
+import 'package:reservapp/services/restaurants_service.dart';
+import 'package:http/http.dart' as http;
 import '../assets/widgets/list_restaurants.dart';
 import '../models/restaurant.dart';
 import '../models/user.dart';
@@ -293,49 +296,75 @@ class RestaurantList extends StatefulWidget {
 }
 
 class _RestaurantList extends State<RestaurantList> {
-  // Teste dos modelos
-  // TODO: Remover esse teste
-  late List<Restaurant> restaurantList = [
-    Restaurant(
-        1,
-        "Costela no Bafo",
-        "PA",
-        "12h00 - 17h00",
-        4,
-        "R",
-        "Pratos de carne grelhados de estilo familiar, combinados com cerveja e cocktails em um ambiente rústico e animado.",
-        "https://media-cdn.tripadvisor.com/media/photo-s/05/c2/83/34/costela-no-bafo.jpg",
-        ""),
-    Restaurant(
-        2,
-        "Iwata Sushi",
-        "PA",
-        "19h00 - 23h00",
-        5,
-        "K",
-        "Rodízio de sushi em Pouso Alegre",
-        "https://pr0.nicelocal.br.com/l-H8-PM_PWuAyv9z7-Ur-A/2000x1500,q75/4px-BW84_n3lJhgQGe6caI1vAfZfD8yOKqS4dO4Py5dVeCDAtW6xSQ3E2jFMD_F9x4cSVzPPFOz9KtIckfFPhOetq2LpWfalnI9_Dv1FNEerk4AgI1-JQHqN8sqFSM5oaRmT7TL6RHM",
-        ""),
-    Restaurant(
-        3,
-        "Vereda",
-        "PA",
-        "19h00 - 23h00",
-        3,
-        "P",
-        "Pizza hmm",
-        "https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800",
-        ""),
-  ];
+  RestaurantsController restaurantsController = RestaurantsController(RestaurantsService(http.Client()));
 
-  // Fim do teste dos modelos
+  Future<List<Map<String, dynamic>>> _getRestaurants() async {
+    List<Map<String, dynamic>> jsonResponse = await restaurantsController.showRestaurants();
+
+    return jsonResponse;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       height: 500,
-      child: listRestaurants(restaurantList, context),
+      child: FutureBuilder<List<Map<String, dynamic>>>(
+        future: _getRestaurants(),
+        builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+          List<Widget> children;
+
+          if(snapshot.hasData && snapshot.data!.isNotEmpty){ // Recuperou os restaurantes com sucesso
+            final List<Restaurant> restaurantList = snapshot.data!.map((restaurant) {
+              return Restaurant(
+                  restaurant['id'],
+                  restaurant['nome'],
+                  restaurant['endereco'],
+                  restaurant['horariosFuncionamento'],
+                  restaurant['avaliacao'],
+                  restaurant['categoria'],
+                  restaurant['descricao'],
+                  restaurant['imagemFundoURL'],
+                  restaurant['iconeURL']
+              );
+            }).toList();
+
+            return listRestaurants(restaurantList, context);
+
+          } else if (snapshot.hasData && snapshot.data!.isEmpty) { // Não há nenhum restaurante
+            children = const <Widget>[
+              Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text('Não foram encontrados nenhum restaurante na sua área :(')
+              )
+            ];
+          } else if(snapshot.hasError) { // Erro ao recuperar restaurantes
+            children = const <Widget>[
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('Erro ao carregar os restaurantes. Verifique sua conexão com a internet.')
+              )
+            ];
+          } else { // Carregando
+            children = const <Widget>[
+              SizedBox(
+                width: 60,
+                height: 60,
+                child: CircularProgressIndicator(),
+              ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Text('Carregando...'),
+              ),
+            ];
+          }
+
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
+          );
+        },
+      ),
     );
   }
 }
