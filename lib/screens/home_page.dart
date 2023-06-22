@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:reservapp/auth/local_storage.dart';
 import 'package:reservapp/controllers/restaurants_controller.dart';
@@ -10,7 +12,14 @@ import '../models/restaurant.dart';
 import '../models/user.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final StreamController<List<Map<String, dynamic>>>
+      _restaurantsStreamController =
+      StreamController<List<Map<String, dynamic>>>.broadcast();
+
+  RestaurantsController _restaurantsController =
+      RestaurantsController(RestaurantsService(http.Client()));
 
   @override
   State<HomePage> createState() => _HomePage();
@@ -48,10 +57,17 @@ class _HomePage extends State<HomePage> {
         elevation: 0,
       ),
       body: ListView(
-        children: const [
-          SearchRestaurant(),
-          FilterList(),
-          RestaurantList(),
+        children: [
+          SearchRestaurant(
+            restaurantsStreamController: widget._restaurantsStreamController,
+            restaurantsController: widget._restaurantsController,
+          ),
+          FilterList(
+              restaurantsStreamController: widget._restaurantsStreamController,
+              restaurantsController: widget._restaurantsController),
+          RestaurantList(
+              restaurantsStreamController: widget._restaurantsStreamController,
+              restaurantsController: widget._restaurantsController),
         ],
       ),
       drawer: Drawer(
@@ -71,11 +87,13 @@ class _HomePage extends State<HomePage> {
                       child = ListTile(
                         leading: CircleAvatar(
                           radius: 15.0,
-                          backgroundColor: Theme.of(context).colorScheme.onTertiary,
+                          backgroundColor:
+                              Theme.of(context).colorScheme.onTertiary,
                           child: Image.network(
                             snapshot.data!.pictureUrl,
                             errorBuilder: (context, exception, stacktrace) {
-                              return Image.asset('lib/assets/images/default_icon.png');
+                              return Image.asset(
+                                  'lib/assets/images/default_icon.png');
                             },
                           ),
                         ),
@@ -114,7 +132,8 @@ class _HomePage extends State<HomePage> {
               title: const Text('Sair'),
               onTap: () async {
                 await LocalStorage().removeUser().then((value) {
-                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/', (route) => false);
                 });
               },
             ),
@@ -124,78 +143,6 @@ class _HomePage extends State<HomePage> {
     );
   }
 }
-
-// class HomePage extends StatelessWidget {
-//   HomePage({super.key});
-//
-//   User user = User.fromJson(await SessionManager().get('user'));
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: showCity,
-//         centerTitle: true,
-//         elevation: 0,
-//       ),
-//
-//       body: ListView(
-//         children: const [
-//           SearchRestaurant(),
-//           FilterList(),
-//           RestaurantList(),
-//         ],
-//       ),
-//
-//       drawer: Drawer(
-//         child: ListView(
-//           children: [
-//             SizedBox(
-//               height: 90,
-//               child: DrawerHeader(
-//                 child: ListTile(
-//                   leading: Icon(Icons.person),
-//                   title: Text("Usuário"),
-//                   trailing: Icon(Icons.edit),
-//                 ),
-//                 decoration: BoxDecoration(
-//                   color: Theme.of(context).colorScheme.primary,
-//                 ),
-//               ),
-//             ),
-//             ListTile(
-//               title: const Text('Minhas Reservas'),
-//               onTap: () {
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => const CheckReservations()),
-//                 );
-//               },
-//             ),
-//             ListTile(
-//               title: const Text('Favoritos'),
-//               onTap: () {
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => const FavoriteRestaurants()),
-//                 );
-//               },
-//             ),
-//             ListTile(
-//               title: const Text('Sair'),
-//               onTap: () {
-//                 Navigator.push(
-//                   context,
-//                   MaterialPageRoute(builder: (context) => const MyApp()),
-//                 );
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 Widget showCity = GestureDetector(
     onTap: () => debugPrint('Location Selector'),
@@ -212,7 +159,13 @@ Widget showCity = GestureDetector(
     ));
 
 class SearchRestaurant extends StatefulWidget {
-  const SearchRestaurant({super.key});
+  StreamController<List<Map<String, dynamic>>> restaurantsStreamController;
+  RestaurantsController restaurantsController;
+
+  SearchRestaurant(
+      {super.key,
+      required this.restaurantsStreamController,
+      required this.restaurantsController});
 
   @override
   State<SearchRestaurant> createState() => _SearchRestaurant();
@@ -249,59 +202,177 @@ class _SearchRestaurant extends State<SearchRestaurant> {
 }
 
 class FilterList extends StatefulWidget {
-  const FilterList({super.key});
+  StreamController<List<Map<String, dynamic>>> restaurantsStreamController;
+  RestaurantsController restaurantsController;
+
+  FilterList(
+      {super.key,
+      required this.restaurantsStreamController,
+      required this.restaurantsController});
 
   @override
   State<FilterList> createState() => _FilterList();
 }
 
 class _FilterList extends State<FilterList> {
-  static const spacer = SizedBox(width: 12);
+  List<RadioModel> types = <RadioModel>[];
+
+  @override
+  void initState() {
+    super.initState();
+
+    types.add(RadioModel(true, "Todos", "T"));
+    types.add(RadioModel(false, "Japa", "J"));
+    types.add(RadioModel(false, "Pizza", "P"));
+    types.add(RadioModel(false, "Esfirra", "E"));
+    types.add(RadioModel(false, "Marmitex", "M"));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void _handleButtonPressed(String type) async {
+    if (type == "T") {
+      try {
+        List<Map<String, dynamic>> jsonResponse =
+            await widget.restaurantsController.showRestaurants();
+        widget.restaurantsStreamController.add(jsonResponse);
+      } catch (error) {
+        widget.restaurantsStreamController.addError(error);
+      }
+    } else {
+      try {
+        List<Map<String, dynamic>> jsonResponse = await widget
+            .restaurantsController
+            .showRestaurantsByType(type); // Primeira letra do nome do filtro
+        widget.restaurantsStreamController.add(jsonResponse);
+      } catch (error) {
+        widget.restaurantsStreamController.addError(error);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20),
       height: 35,
-      child: ListView(
+      margin: const EdgeInsets.only(left: 20, right: 20),
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        children: [
-          FilledButton(
-              onPressed: () {},
+        itemCount: types.length, // Number of buttons in the row
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: types[index].isSelected ?
+            FilledButton(
+              onPressed: types[index].isSelected
+                  ? () {}
+                  : () => setState(() {
+                        for (var element in types) {
+                          element.isSelected = false;
+                        }
+                        types[index].isSelected = true;
+                        _handleButtonPressed(types[index].type);
+                      }),
               style: FilledButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10))),
-              child: const Text("Todos")),
-          spacer,
-          filterButton("Japa"),
-          spacer,
-          filterButton("Pizza"),
-          spacer,
-          filterButton("Hamburguer"),
-          spacer,
-          filterButton("Esfirra"),
-          spacer,
-          filterButton("Marmita"),
-        ],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+              child: Text(types[index].buttonText),
+            ) :
+            OutlinedButton(
+              onPressed: types[index].isSelected
+                  ? null
+                  : () => setState(() {
+                for (var element in types) {
+                  element.isSelected = false;
+                }
+                types[index].isSelected = true;
+                _handleButtonPressed(types[index].type);
+              }),
+              style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              child: Text(types[index].buttonText, style: TextStyle(color: Theme.of(context).colorScheme.onBackground),),
+            ),
+          );
+        },
       ),
     );
   }
+
+// @override
+// Widget build(BuildContext context) {
+//   return Container(
+//     margin: const EdgeInsets.only(left: 20, right: 20),
+//     height: 35,
+//     child: ListView(
+//       scrollDirection: Axis.horizontal,
+//       children: [
+//         FilledButton(
+//             onPressed: () {},
+//             style: FilledButton.styleFrom(
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(10))),
+//             child: const Text("Todos")),
+//         spacer,
+//         FilledButton(
+//             onPressed: () {},
+//             style: FilledButton.styleFrom(
+//                 shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(10))),
+//             child: Text("Japa")),
+//         spacer,
+//         filterButton("Pizza"),
+//         spacer,
+//         filterButton("Hamburguer"),
+//         spacer,
+//         filterButton("Esfirra"),
+//         spacer,
+//         filterButton("Marmita"),
+//       ],
+//     ),
+//   );
+// }
 }
 
 class RestaurantList extends StatefulWidget {
-  const RestaurantList({super.key});
+  StreamController<List<Map<String, dynamic>>> restaurantsStreamController;
+  RestaurantsController restaurantsController;
+
+  RestaurantList(
+      {super.key,
+      required this.restaurantsStreamController,
+      required this.restaurantsController});
 
   @override
   State<StatefulWidget> createState() => _RestaurantList();
 }
 
 class _RestaurantList extends State<RestaurantList> {
-  RestaurantsController restaurantsController = RestaurantsController(RestaurantsService(http.Client()));
+  void _fetchRestaurants() async {
+    try {
+      List<Map<String, dynamic>> jsonResponse =
+          await widget.restaurantsController.showRestaurants();
+      widget.restaurantsStreamController.add(jsonResponse);
+    } catch (error) {
+      widget.restaurantsStreamController.addError(error);
+    }
+  }
 
-  Future<List<Map<String, dynamic>>> _getRestaurants() async {
-    List<Map<String, dynamic>> jsonResponse = await restaurantsController.showRestaurants();
+  @override
+  void dispose() {
+    widget.restaurantsStreamController.close();
+    super.dispose();
+  }
 
-    return jsonResponse;
+  @override
+  void initState() {
+    super.initState();
+    _fetchRestaurants();
   }
 
   @override
@@ -309,13 +380,16 @@ class _RestaurantList extends State<RestaurantList> {
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 20, 20, 0),
       height: 500,
-      child: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _getRestaurants(),
-        builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+      child: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: widget.restaurantsStreamController.stream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
           List<Widget> children;
 
-          if(snapshot.hasData && snapshot.data!.isNotEmpty){ // Recuperou os restaurantes com sucesso
-            final List<Restaurant> restaurantList = snapshot.data!.map((restaurant) {
+          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+            // Recuperou os restaurantes com sucesso
+            final List<Restaurant> restaurantList =
+                snapshot.data!.map((restaurant) {
               return Restaurant(
                   restaurant['id'],
                   restaurant['nome'],
@@ -325,27 +399,28 @@ class _RestaurantList extends State<RestaurantList> {
                   restaurant['categoria'],
                   restaurant['descricao'],
                   restaurant['imagemFundoURL'],
-                  restaurant['iconeURL']
-              );
+                  restaurant['iconeURL']);
             }).toList();
 
             return listRestaurants(restaurantList, context);
-
-          } else if (snapshot.hasData && snapshot.data!.isEmpty) { // Não há nenhum restaurante
+          } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+            // Não há nenhum restaurante
             children = const <Widget>[
               Padding(
                   padding: EdgeInsets.all(16),
-                  child: Text('Não foram encontrados nenhum restaurante na sua área :(')
-              )
+                  child: Text(
+                      'Não foram encontrados nenhum restaurante na sua área :('))
             ];
-          } else if(snapshot.hasError) { // Erro ao recuperar restaurantes
+          } else if (snapshot.hasError) {
+            // Erro ao recuperar restaurantes
             children = const <Widget>[
               Padding(
-                padding: EdgeInsets.all(16),
-                child: Text('Erro ao carregar os restaurantes. Verifique sua conexão com a internet.')
-              )
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                      'Erro ao carregar os restaurantes. Verifique sua conexão com a internet.'))
             ];
-          } else { // Carregando
+          } else {
+            // Carregando
             children = const <Widget>[
               SizedBox(
                 width: 60,
@@ -376,4 +451,12 @@ Widget filterButton(buttonText) {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
       child: Text(buttonText));
+}
+
+class RadioModel {
+  bool isSelected;
+  final String buttonText;
+  final String type;
+
+  RadioModel(this.isSelected, this.buttonText, this.type);
 }

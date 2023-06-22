@@ -82,7 +82,7 @@ class _ContinueButton extends State<ContinueButton> {
         onPressed: () => {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => HomePage()),
           )
         },
         child: const Text(
