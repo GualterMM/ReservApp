@@ -4,7 +4,7 @@ class Reservation {
   final String time;
   final int guests;
   final int userId;
-  final int restaurantId;
+  final String restaurantName;
 
   Reservation(
       this.idReservation,
@@ -12,7 +12,7 @@ class Reservation {
       this.time,
       this.guests,
       this.userId,
-      this.restaurantId
+      this.restaurantName
       );
 
   Reservation.fromJson(Map<String, dynamic> json):
@@ -21,13 +21,13 @@ class Reservation {
       time = json['horario'],
       guests = json['numeroPessoas'],
       userId = json['usuario_id'],
-      restaurantId = json['restaurante_id'];
+      restaurantName = json['restaurante_nome'];
 
   Map<String, dynamic> toJson() => {
     "data" : date,
     "hora" : time,
     "numeroPessoas" : guests,
     "usuario_id" : userId,
-    "restaurante_id" : restaurantId,
+    "restaurante_id" : restaurantName,
   };
 }

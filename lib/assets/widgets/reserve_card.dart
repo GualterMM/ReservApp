@@ -24,7 +24,7 @@ Widget reserveCard (Reservation reservation){
                 ],
               )
           ),
-          Expanded(flex: 5, child: Text(reservation.restaurantId.toString())),
+          Expanded(flex: 5, child: Text(reservation.restaurantName)),
           Expanded(
               flex: 3,
               child: Column(
