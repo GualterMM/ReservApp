@@ -131,7 +131,6 @@ class _TelaCardapio extends State<TelaCardapio> {
                       Expanded(
                         flex: 2,
                         child: Container(
-                          //padding: const EdgeInsets.all(20.0),
                           child: Ink(
                             decoration: ShapeDecoration(
                               color: Colors.orange[100],
@@ -230,7 +229,7 @@ class _TelaCardapio extends State<TelaCardapio> {
             return Container(
                 padding: EdgeInsets.all(20),
                 color: Colors.white,
-                child: listMenu(menu, types, controller)
+                child: listMenu(menu, controller)
             );
           },
           initialChildSize: 0.15,
