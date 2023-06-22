@@ -23,8 +23,19 @@ Widget restaurantCard (Restaurant restaurant, BuildContext context){
             Expanded(
                 flex: 3,
                 child: CircleAvatar(
-                  backgroundImage: NetworkImage(restaurant.backgroundPictureUrl),
+                  backgroundColor: Theme.of(context).colorScheme.onTertiary,
                   radius: 30,
+                  child: ClipOval(
+                    child: Image.network(
+                        restaurant.iconPictureUrl,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, exception, stacktrace) {
+                          return Image.asset('lib/assets/images/default_icon_restaurant.png');
+                      },
+                    ),
+                  ),
                 )),
             Expanded(flex: 5, child: Text(restaurant.name)),
             Expanded(

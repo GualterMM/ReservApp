@@ -20,9 +20,13 @@ class RestaurantsController implements IRestaurantController{
     }
 
     if(response.statusCode == 200){
-      final List data = json.decode(response.body);
-      final List<Map<String, dynamic>> restaurants = List<Map<String, dynamic>>.from(data);
-      jsonResponse = restaurants;
+      try{
+        final List data = json.decode(latin1.decode(response.bodyBytes));
+        final List<Map<String, dynamic>> restaurants = List<Map<String, dynamic>>.from(data);
+        jsonResponse = restaurants;
+      } on FormatException catch (e){
+        throw e.message;
+      }
     } else{
       return _errorHandler(response);
     }
@@ -31,7 +35,7 @@ class RestaurantsController implements IRestaurantController{
   }
 
   @override
-  Future<Map<String, dynamic>> showRestaurantByName(String name) async {
+  Future<List<Map<String, dynamic>>> showRestaurantByName(String name) async {
     dynamic jsonResponse;
 
     try{
@@ -41,9 +45,11 @@ class RestaurantsController implements IRestaurantController{
     }
 
     if(response.statusCode == 200){
-      jsonResponse = json.decode(response.body);
+      final List data = json.decode(latin1.decode(response.bodyBytes));
+      final List<Map<String, dynamic>> restaurant = List<Map<String, dynamic>>.from(data);
+      jsonResponse = restaurant;
     } else{
-      return _errorHandler(response)[0];
+      return _errorHandler(response);
     }
 
     return jsonResponse;
@@ -60,7 +66,7 @@ class RestaurantsController implements IRestaurantController{
     }
 
     if(response.statusCode == 200){
-      final List data = json.decode(response.body);
+      final List data = json.decode(latin1.decode(response.bodyBytes));
       final List<Map<String, dynamic>> restaurants = List<Map<String, dynamic>>.from(data);
       jsonResponse = restaurants;
     } else{
@@ -82,7 +88,7 @@ class RestaurantsController implements IRestaurantController{
     }
 
     if(response.statusCode == 200){
-      jsonResponse = json.decode(response.body);
+      jsonResponse = json.decode(latin1.decode(response.bodyBytes));
     } else{
       return _errorHandler(response)[0];
     }

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:reservapp/auth/local_storage.dart';
 import 'package:reservapp/controllers/restaurants_controller.dart';
@@ -172,31 +171,85 @@ class SearchRestaurant extends StatefulWidget {
 }
 
 class _SearchRestaurant extends State<SearchRestaurant> {
+  TextEditingController _searchFieldController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  void _handleSearch(String name) async {
+    try {
+      List<Map<String, dynamic>> jsonResponse = await widget.restaurantsController.showRestaurantByName(name);
+
+      widget.restaurantsStreamController.add(jsonResponse);
+    } catch (error) {
+      widget.restaurantsStreamController.addError(error);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(20),
         alignment: Alignment.centerLeft,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Escolha o melhor para você!",
-              textScaleFactor: 1.3,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Escolha o melhor para você!",
+                textScaleFactor: 1.3,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            TextField(
-              decoration: InputDecoration(
-                  labelText: 'Procurar',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  prefixIcon: const Icon(Icons.search)),
-            ),
-          ],
+              const SizedBox(height: 10),
+              TextFormField(
+                textInputAction: TextInputAction.search,
+                controller: _searchFieldController,
+                decoration: InputDecoration(
+                    labelText: 'Procurar',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    suffixIcon: GestureDetector(
+                      child: const Icon(Icons.search),
+                      onTap: (){
+                        if(_formKey.currentState!.validate()){
+                          setState(() {
+                            _handleSearch(_searchFieldController.text);
+                          });
+                        }
+                      },
+                      //onTap
+                    ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Insira um nome para fazer a procura.';
+                  }
+
+                  return null;
+                },
+
+                onFieldSubmitted: (value){
+                  if(_formKey.currentState!.validate()){
+                    setState(() {
+                      _handleSearch(value);
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
         ));
   }
 }
@@ -223,9 +276,10 @@ class _FilterList extends State<FilterList> {
 
     types.add(RadioModel(true, "Todos", "T"));
     types.add(RadioModel(false, "Japa", "J"));
-    types.add(RadioModel(false, "Pizza", "P"));
-    types.add(RadioModel(false, "Esfirra", "E"));
-    types.add(RadioModel(false, "Marmitex", "M"));
+    types.add(RadioModel(false, "Comidas Tradicionais", "C"));
+    types.add(RadioModel(false, "Doceria", "D"));
+    types.add(RadioModel(false, "Italiana", "I"));
+    types.add(RadioModel(false, "Outras", "O"));
   }
 
   @override
@@ -303,40 +357,6 @@ class _FilterList extends State<FilterList> {
       ),
     );
   }
-
-// @override
-// Widget build(BuildContext context) {
-//   return Container(
-//     margin: const EdgeInsets.only(left: 20, right: 20),
-//     height: 35,
-//     child: ListView(
-//       scrollDirection: Axis.horizontal,
-//       children: [
-//         FilledButton(
-//             onPressed: () {},
-//             style: FilledButton.styleFrom(
-//                 shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(10))),
-//             child: const Text("Todos")),
-//         spacer,
-//         FilledButton(
-//             onPressed: () {},
-//             style: FilledButton.styleFrom(
-//                 shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(10))),
-//             child: Text("Japa")),
-//         spacer,
-//         filterButton("Pizza"),
-//         spacer,
-//         filterButton("Hamburguer"),
-//         spacer,
-//         filterButton("Esfirra"),
-//         spacer,
-//         filterButton("Marmita"),
-//       ],
-//     ),
-//   );
-// }
 }
 
 class RestaurantList extends StatefulWidget {
@@ -409,15 +429,15 @@ class _RestaurantList extends State<RestaurantList> {
               Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                      'Não foram encontrados nenhum restaurante na sua área :('))
+                      'Não foram encontrados nenhum restaurante :('))
             ];
           } else if (snapshot.hasError) {
             // Erro ao recuperar restaurantes
-            children = const <Widget>[
+            children = <Widget>[
               Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                      'Erro ao carregar os restaurantes. Verifique sua conexão com a internet.'))
+                      'Erro ao carregar os restaurantes. Verifique sua conexão com a internet.\n${snapshot.stackTrace}'))
             ];
           } else {
             // Carregando

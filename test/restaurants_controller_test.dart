@@ -70,25 +70,27 @@ void main(){
     test("Should return a JSON object containing info about the given restaurant's name when the service return a HTTP 200 OK", () async {
       when(mockService.getRestaurantByName(name)).thenAnswer((_) async => http.Response(
           '''
-          {
-            "id": 1,
-            "nome": "Vereda",
-            "endereco": "Rua ABC",
-            "horariosFuncionamento": "19:00 - 00:00",
-            "avaliacao": 10,
-            "descricao": "Melhor pizzaria de Pouso Alegre!",
-            "imagemFundoURL": "https://www.minasgerais.com.br/imagens/atracoes/1523477577MWcuGlqNJ3.jpg",
-            "iconeURL": "https://veredapizzaria.com.br/gallery_gen/b3b204b265029305234d4dfb5132b5c3_751x475.63333333333.jpg",
-            "categoria": "P"
-          }
+          [
+            {
+              "id": 1,
+              "nome": "Vereda",
+              "endereco": "Rua ABC",
+              "horariosFuncionamento": "19:00 - 00:00",
+              "avaliacao": 10,
+              "descricao": "Melhor pizzaria de Pouso Alegre!",
+              "imagemFundoURL": "https://www.minasgerais.com.br/imagens/atracoes/1523477577MWcuGlqNJ3.jpg",
+              "iconeURL": "https://veredapizzaria.com.br/gallery_gen/b3b204b265029305234d4dfb5132b5c3_751x475.63333333333.jpg",
+              "categoria": "P"
+            }
+          ]
         ''',
           200
       ));
 
-      Map<String, dynamic> jsonResponse = await restaurantsController.showRestaurantByName(name);
+      List<Map<String, dynamic>> jsonResponse = await restaurantsController.showRestaurantByName(name);
 
-      expect(jsonResponse.containsKey("error"), false);
-      expect(jsonResponse['nome'], name);
+      expect(jsonResponse[0].containsKey("error"), false);
+      expect(jsonResponse[0]['nome'], name);
     });
   });
 
