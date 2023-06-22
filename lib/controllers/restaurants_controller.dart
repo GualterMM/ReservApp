@@ -70,6 +70,26 @@ class RestaurantsController implements IRestaurantController{
     return jsonResponse;
   }
 
+
+  @override
+  Future<Map<String, dynamic>> showRestaurantById(int id) async {
+    dynamic jsonResponse;
+
+    try{
+      response = await service.getRestaurantById(id);
+    } catch(e){
+      jsonResponse = e.toString();
+    }
+
+    if(response.statusCode == 200){
+      jsonResponse = json.decode(response.body);
+    } else{
+      return _errorHandler(response)[0];
+    }
+
+    return jsonResponse;
+  }
+
   List<Map<String, dynamic>> _errorHandler(http.Response response){
     switch(response.statusCode){
       case 404:

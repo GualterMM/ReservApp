@@ -59,6 +59,17 @@ Uri listRestaurantByNameRoute(String host, String name){
   return url;
 }
 
+Uri listRestaurantByIdRoute(String host, int id){
+  var url = Uri(
+    scheme: 'http',
+    host: host,
+    port: 8000,
+    path: 'restaurantes/$id/',
+  );
+
+  return url;
+}
+
 Uri listItemsByRestaurant(String host, Map<String, dynamic> params){
   var url = Uri(
     scheme: 'http',

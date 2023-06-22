@@ -42,4 +42,15 @@ class RestaurantsService implements IRestaurantService {
     return response;
   }
 
+  @override
+  Future<http.Response> getRestaurantById(int restaurantId) async {
+    try{
+      response = await client.get(router.listRestaurantByIdRoute(constants.LOCAL_HOST, restaurantId));
+    } catch(e){
+      rethrow;
+    }
+
+    return response;
+  }
+
 }
