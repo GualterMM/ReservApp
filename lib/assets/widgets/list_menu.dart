@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 import '../../models/menu_item.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
-Widget menuTile(String name, String description, double price) {
+Widget menuTile(String name, String description, String price) {
   return ListTile(
     title: Text(name),
     subtitle: Text(description),
@@ -14,6 +15,7 @@ Widget menuTile(String name, String description, double price) {
 Widget listMenu(List<MenuItem> items, ScrollController controller) {
   items.sort((a, b) => a.itemType.compareTo(b.itemType));
   final groupedItems = groupBy(items, (obj) => obj.itemType);
+  final br_currency = NumberFormat("#,##0.00", "pt_BR");
 
   return CustomScrollView(
       controller: controller,
@@ -36,7 +38,7 @@ Widget listMenu(List<MenuItem> items, ScrollController controller) {
           delegate: SliverChildBuilderDelegate(
         (context, index) {
           final item = items[index];
-          return menuTile(item.name, item.description, item.price);
+          return menuTile(item.name, item.description, br_currency.format(item.price));
         },
         childCount: items.length,
       )),

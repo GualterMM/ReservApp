@@ -21,7 +21,7 @@ class RestaurantsController implements IRestaurantController{
 
     if(response.statusCode == 200){
       try{
-        final List data = json.decode(latin1.decode(response.bodyBytes));
+        final List data = json.decode(utf8.decode(response.bodyBytes));
         final List<Map<String, dynamic>> restaurants = List<Map<String, dynamic>>.from(data);
         jsonResponse = restaurants;
       } on FormatException catch (e){
@@ -45,7 +45,7 @@ class RestaurantsController implements IRestaurantController{
     }
 
     if(response.statusCode == 200){
-      final List data = json.decode(latin1.decode(response.bodyBytes));
+      final List data = json.decode(utf8.decode(response.bodyBytes));
       final List<Map<String, dynamic>> restaurant = List<Map<String, dynamic>>.from(data);
       jsonResponse = restaurant;
     } else{
@@ -66,7 +66,7 @@ class RestaurantsController implements IRestaurantController{
     }
 
     if(response.statusCode == 200){
-      final List data = json.decode(latin1.decode(response.bodyBytes));
+      final List data = json.decode(utf8.decode(response.bodyBytes));
       final List<Map<String, dynamic>> restaurants = List<Map<String, dynamic>>.from(data);
       jsonResponse = restaurants;
     } else{

@@ -8,7 +8,7 @@ class MenuItem{
   MenuItem(this.idItem, this.name, this.price, this.itemType, this.description);
 
   MenuItem.fromJson(Map<String, dynamic> json):
-      idItem = json['idItem'],
+      idItem = json['id'],
       name = json['nome'],
       price = json['preco'],
       itemType = json['tipoItem'],
