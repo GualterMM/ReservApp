@@ -20,7 +20,7 @@ class ReservationController implements IReservationController{
     }
 
     if(response.statusCode == 200){
-      jsonResponse = json.decode(response.body);
+      jsonResponse = json.decode(latin1.decode(response.bodyBytes));
     } else{
       return _errorHandler(response)[0];
     }
@@ -39,7 +39,7 @@ class ReservationController implements IReservationController{
     }
 
     if(response.statusCode == 200){
-      final List data = json.decode(response.body);
+      final List data = json.decode(latin1.decode(response.bodyBytes));
       final List<Map<String, dynamic>> reservations = List<Map<String, dynamic>>.from(data);
       jsonResponse = reservations;
     } else{

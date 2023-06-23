@@ -20,7 +20,7 @@ class RestaurantMenuController implements IRestaurantMenuController{
     }
 
     if(response.statusCode == 200){
-      final List data = json.decode(response.body);
+      final List data = json.decode(latin1.decode(response.bodyBytes));
       final List<Map<String, dynamic>> items = List<Map<String, dynamic>>.from(data);
       jsonResponse = items;
     } else{

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:reservapp/interfaces/user/i_user_controller.dart';
 import 'package:http/http.dart' as http;
 import '../interfaces/user/i_user_service.dart';
@@ -24,7 +23,7 @@ class UserController implements IUserController{
     }
 
     if(response.statusCode == 200){
-      jsonUser = json.decode(response.body);
+      jsonUser = json.decode(latin1.decode(response.bodyBytes));
     } else{
       return _errorHandler(response);
     }
@@ -53,7 +52,7 @@ class UserController implements IUserController{
     }
 
     if(response.statusCode == 201){
-      jsonResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      jsonResponse = jsonDecode(latin1.decode(response.bodyBytes));
     } else{
       jsonResponse = _errorHandler(response);
     }
