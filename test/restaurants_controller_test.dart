@@ -39,7 +39,7 @@ void main(){
             "endereco": "Rua CBT",
             "horariosFuncionamento": "17:30 - 23:00",
             "avaliacao": 10,
-            "descricao": "Rodízio de Sushi toda noite!",
+            "descricao": "Rodizio de Sushi toda noite!",
             "imagemFundoURL": "https://scontent.fppy4-1.fna.fbcdn.net/v/t39.30808-6/320530861_553801492879363_7377150096181133567_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=e3f864&_nc_ohc=XgKcEvBMO1EAX-psDii&_nc_ht=scontent.fppy4-1.fna&oh=00_AfA3naoUPt143Wm6kWBdqN0vS2AE2Wb1wlGb0uQQLKcnXA&oe=6498B726",
             "iconeURL": "https://s3-us-west-2.amazonaws.com/anotaai/pages/1669728264194blob",
             "categoria": "J"

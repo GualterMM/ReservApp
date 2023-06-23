@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:reservapp/assets/widgets/list_menu.dart';
 import 'package:reservapp/assets/widgets/small_info_container.dart';
+import 'package:reservapp/controllers/favorite_controller.dart';
 import 'package:reservapp/controllers/restaurant_menu_controller.dart';
 import 'package:reservapp/models/restaurant.dart';
 import 'package:reservapp/screens/reservation.dart';
+import 'package:reservapp/services/favorite_service.dart';
 import 'package:reservapp/services/restaurant_menu_service.dart';
 import 'package:http/http.dart' as http;
 
@@ -37,8 +39,12 @@ class TelaCardapio extends StatefulWidget {
 }
 
 class _TelaCardapio extends State<TelaCardapio> {
+  static http.Client httpClient = http.Client();
   RestaurantMenuController restaurantMenuController =
-      RestaurantMenuController(RestaurantMenuService(http.Client()));
+      RestaurantMenuController(RestaurantMenuService(httpClient));
+
+  FavoriteController favoriteController =
+      FavoriteController(FavoriteService(httpClient));
 
   Future<List<Map<String, dynamic>>> _getMenu(int restaurantId) async {
     List<Map<String, dynamic>> jsonResponse =
@@ -52,7 +58,6 @@ class _TelaCardapio extends State<TelaCardapio> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // TODO: Utilizar a URL do restaurante
         Column(
           children: [
             Align(
@@ -78,7 +83,7 @@ class _TelaCardapio extends State<TelaCardapio> {
                     child: Text(
                       widget.restaurant.name,
                       style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                          const TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                     ),
                   ),
                   Expanded(
@@ -117,10 +122,10 @@ class _TelaCardapio extends State<TelaCardapio> {
                           icon: Icon(Icons.favorite,
                               color: Theme.of(context).colorScheme.primary),
                           color: Theme.of(context).colorScheme.onPrimary,
-                          onPressed: () => {
+                          onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text('Restaurante favoritado.'),
-                            ))
+                            ));
                           },
                         ),
                       ),

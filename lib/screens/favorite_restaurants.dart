@@ -20,9 +20,7 @@ class TelaFavoritos extends StatelessWidget{
 
   // TODO: Remover modelo de teste
   late List<Restaurant> restaurantList = [
-    Restaurant(1, "Costela no Bafo", "PA", "12h00 - 17h00", 4, "R", "Comidinha hmm", "https://media-cdn.tripadvisor.com/media/photo-s/05/c2/83/34/costela-no-bafo.jpg", ""),
-    Restaurant(2, "Iwata Sushi", "PA", "19h00 - 23h00", 5, "K", "Japa hmm", "https://pr0.nicelocal.br.com/l-H8-PM_PWuAyv9z7-Ur-A/2000x1500,q75/4px-BW84_n3lJhgQGe6caI1vAfZfD8yOKqS4dO4Py5dVeCDAtW6xSQ3E2jFMD_F9x4cSVzPPFOz9KtIckfFPhOetq2LpWfalnI9_Dv1FNEerk4AgI1-JQHqN8sqFSM5oaRmT7TL6RHM", ""),
-    Restaurant(3, "Vereda", "PA", "19h00 - 23h00", 3, "P", "Pizza hmm", "https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800", ""),
+    Restaurant(1, "Vereda", "Rua ABC  ", "19h00 - 00h00", 10, "P", "Melhor pizzaria de Pouso Alegre!", "https://www.minasgerais.com.br/imagens/atracoes/1523477577MWcuGlqNJ3.jpg", "https://veredapizzaria.com.br/gallery_gen/b3b204b265029305234d4dfb5132b5c3_751x475.63333333333.jpg"),
   ];
 
   @override

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:reservapp/interfaces/favorites/i_favorite_service.dart';
 import 'package:reservapp/routes/router.dart' as router;
 import 'package:reservapp/assets/constants/consts.dart' as constants;
@@ -8,7 +9,6 @@ class FavoriteService implements IFavoriteService{
   late http.Response response;
 
   FavoriteService(this.client);
-
 
   @override
   Future<http.Response> getUserFavorites(int userId) async {
@@ -23,14 +23,19 @@ class FavoriteService implements IFavoriteService{
 
   @override
   Future<http.Response> postUserFavorite(int userId, int restaurantId) async {
+
     try{
+      debugPrint("Aqui");
       response = await client.post(router.postFavorite(constants.LOCAL_HOST), body: {
         "usuario_id": userId,
         "restaurante_id": restaurantId
       });
+      debugPrint("Resposta");
     } catch(e){
       rethrow;
     }
+
+    debugPrint(response.toString());
 
     return response;
   }
