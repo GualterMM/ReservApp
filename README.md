@@ -22,7 +22,7 @@ O intuito do projeto é permitir ao usuário realizar reservas nos restaurantes 
 
 Abra a pasta que deseja instalar pelo terminal, e clone o repositório:
 ```
-git clone -b relatorio2 https://github.com/GualterMM/C214-Lab-Relatorio3.git
+git clone https://github.com/GualterMM/ReservApp.git
 ```
 
 Logo depois, instale as dependências utilizando o seguinte comando:
