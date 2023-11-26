@@ -26,6 +26,9 @@ jobs:
       - name: Get Flutter Pub Dependencies
         run: flutter pub get
 
+      - name: Upgrade dependencies
+        run: flutter pub upgrade
+
       - name: Generate Mocks
         run: dart run build_runner build
 
